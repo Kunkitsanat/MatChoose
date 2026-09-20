@@ -17,3 +17,10 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/templates/
+    - assets/templates/tshirt/
+    - assets/templates/shirt/
+    - assets/templates/pants/
+    - assets/templates/shorts/
