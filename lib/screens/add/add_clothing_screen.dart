@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:matchoose/screens/add/align_items_screen.dart';
 
 class AddClothingScreen extends StatelessWidget {
   const AddClothingScreen({super.key});
@@ -63,7 +64,7 @@ class AddClothingScreen extends StatelessWidget {
                       width: 150,
                       height: 120,
                       child: FilledButton(
-                        onPressed: () {},
+                        onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const AlignItemsScreen())),
                         style: FilledButton.styleFrom(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           backgroundColor: Colors.brown.shade200,
