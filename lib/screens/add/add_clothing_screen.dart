@@ -1,7 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class AddClothingScreen extends StatelessWidget {
   const AddClothingScreen({super.key});
+
+  Future<void> pickImage() async {
+    final ImagePicker picker = ImagePicker();
+
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
+
+    if (image != null) {
+      print(image.path);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +40,7 @@ class AddClothingScreen extends StatelessWidget {
                       width: 150,
                       height: 120,
                       child: FilledButton(
-                        onPressed: () {},
+                        onPressed: pickImage,
                         style: FilledButton.styleFrom(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                           backgroundColor: Colors.brown.shade200,
