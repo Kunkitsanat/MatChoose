@@ -9,6 +9,8 @@ class SearchScreen extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
 
             Row(
@@ -17,6 +19,10 @@ class SearchScreen extends StatelessWidget {
                 const Text('Search',style: TextStyle(fontSize: 24.0,),),
               ],
             ),
+
+            SizedBox(height: 30,),
+
+            Text('CATEGORY',),
           ]
         )
       )
