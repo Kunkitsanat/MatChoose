@@ -11,7 +11,7 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Align Items')),
+      appBar: AppBar(title: Text('Align Items'),centerTitle: true,),
       body: SafeArea(
         child: const Center(
           child: Text('Align Items')
