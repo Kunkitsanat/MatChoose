@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
 
 /// หน้า "Align Outfit" - กล้องถ่ายเสื้อผ้าพร้อมกรอบ guide
 ///
@@ -6,8 +7,43 @@ import 'package:flutter/material.dart';
 /// - ยังไม่ต่อกล้องจริง (ใช้กล่องสีทึบแทน)
 /// - guide fix เป็น "tshirt" ตายตัว ยังไม่ต่อ overlay.png จริง
 /// - ปุ่มต่างๆ ยังไม่มี logic กดแล้วทำงาน แค่วางตำแหน่งให้ถูกก่อน
-class AlignItemsScreen extends StatelessWidget {
+class AlignItemsScreen extends StatefulWidget {
   const AlignItemsScreen({super.key});
+
+  @override
+  State<AlignItemsScreen> createState() => _AlignItemsScreenState();
+}
+
+class _AlignItemsScreenState extends State<AlignItemsScreen> {
+  late CameraController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _initCamera();
+  }
+
+  Future<void> _initCamera() async {
+    final cameras = await availableCameras();
+
+    _controller = CameraController(
+      cameras.first,
+      ResolutionPreset.high,
+      enableAudio: false,
+    );
+
+    await _controller.initialize();
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +57,15 @@ class AlignItemsScreen extends StatelessWidget {
             Positioned.fill(
               child: Container(
                 margin: const EdgeInsets.fromLTRB(20, 70, 20, 100),
+                clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1C1512),
                   borderRadius: BorderRadius.circular(24),
                 ),
+                child: _controller.value.isInitialized
+                  ? CameraPreview(_controller)
+                  : const Center(
+                    child: CircularProgressIndicator(),
+                  ),
               ),
             ),
 
