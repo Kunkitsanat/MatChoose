@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart' as img;
 
+import 'save_item_screen.dart';
+
 /// ระยะขอบระหว่างกรอบเส้นประกับรูป asset (พิกเซลบนจอ)
 const double _kGuidePad = 10;
 
@@ -195,7 +197,7 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
       );
 
       if (!mounted) return;
-      await _showResult(outPath);
+      await _goToSaveItem(outPath);
     } catch (e) {
       debugPrint('Capture error: $e');
       if (mounted) {
@@ -208,33 +210,19 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
     }
   }
 
-  Future<void> _showResult(String path) {
-    return showDialog<void>(
-      context: context,
-      builder: (ctx) => Dialog(
-        backgroundColor: const Color(0xFF2A211C),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              // พื้นสีอ่อนไว้ดูว่าตัดพื้นหลังออกจริง
-              Container(
-                color: const Color(0xFFE6E1D8),
-                padding: const EdgeInsets.all(8),
-                child: Image.file(File(path)),
-              ),
-              const SizedBox(height: 12),
-              // TODO: ส่ง path นี้ (PNG โปร่งใส) ไปหน้าถัดไป / เก็บลง wardrobe
-              TextButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('ปิด'),
-              ),
-            ],
-          ),
-        ),
+  /// ไปหน้า Preview/Save item พร้อมรูปที่ crop แล้ว + guide type ที่ใช้ถ่าย
+  /// รอผลกลับ: ถ้าหน้านั้น pop กลับมาพร้อม `true` (save สำเร็จแล้ว)
+  /// ให้ปิดหน้ากล้องนี้ต่อไปอีกที ถ้า pop มาเฉยๆ (กดลบ/ย้อนกลับ) ก็ถ่ายใหม่ได้เลย
+  Future<void> _goToSaveItem(String path) async {
+    final saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => SaveItemScreen(imagePath: path, guideType: _guide),
       ),
     );
+
+    if (saved == true && mounted) {
+      Navigator.of(context).pop(true);
+    }
   }
 
   // ---------- UI ----------
