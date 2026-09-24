@@ -130,6 +130,38 @@ class ClosetRepository {
 
     await (await _dbFile()).writeAsString(jsonEncode(data));
   }
+
+  Future<void> toggleFavorite(String id) async {
+  items.value = [
+    for (final i in items.value)
+      i.id == id
+          ? ClothingItem(
+              id: i.id,
+              name: i.name,
+              imagePath: i.imagePath,
+              category: i.category,
+              color: i.color,
+              style: i.style,
+              createdAt: i.createdAt,
+              isFavorite: !i.isFavorite,
+            )
+          : i,
+  ];
+  await _persist();
+  }
+
+  Future<void> delete(String id) async {
+    final target = items.value.where((i) => i.id == id).toList();
+    items.value = items.value.where((i) => i.id != id).toList();
+    await _persist();
+
+    // ลบไฟล์รูปด้วย (ไม่ critical ถ้าลบไม่สำเร็จ)
+    for (final t in target) {
+      try {
+        await File(t.imagePath).delete();
+      } catch (_) {}
+    }
+  }
 }
 
 T _enumByName<T extends Enum>(List<T> values, Object? name, T fallback) {
