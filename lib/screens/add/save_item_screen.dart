@@ -3,15 +3,25 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'align_items_screen.dart' show GuideType;
+import 'closet_repository.dart';
+import 'package:matchoose/models/clothing_item.dart';
 
-/// tag ที่เลือกได้ในหน้านี้ (ตาม mockup: Casual / Formal)
-enum ItemTag { casual, formal }
+// ============================================================
+// Screen
+// ============================================================
 
-/// หน้า "Preview Item" - แสดงรูปที่ถ่าย+crop มาแล้ว ให้ user
-/// ยืนยัน category/color/tag ก่อนบันทึกเข้าตู้เสื้อผ้า
+const _bg = Color(0xFFF7F5F0);
+const _border = Color(0xFFEAE5DA);
+const _muted = Color(0xFF8A847B);
+const _ink = Color(0xFF2A211C);
+const _accent = Color(0xFFC4B29C);
+const _danger = Color(0xFFC0392B);
+
+/// หน้า "Save Item" - แสดงรูปที่ถ่าย+crop มาแล้ว ให้ user เลือก
+/// category / color / style ก่อนกด Add to Closet
 ///
-/// ตอนนี้เป็น static-ish: มี UI ครบและกดเลือก tag ได้จริง
-/// แต่ยังไม่มี logic save ข้อมูลจริง (รอคุยเรื่อง storage ก่อน)
+/// pop กลับพร้อม `true` เมื่อบันทึกสำเร็จ, `false` เมื่อกดย้อนกลับ
+/// (align_items_screen ใช้ค่านี้ตัดสินใจว่าจะปิดหน้ากล้องต่อหรือไม่)
 class SaveItemScreen extends StatefulWidget {
   const SaveItemScreen({
     super.key,
@@ -30,102 +40,238 @@ class SaveItemScreen extends StatefulWidget {
 }
 
 class _SaveItemScreenState extends State<SaveItemScreen> {
-  ItemTag? _selectedTag;
+  late ItemCategory _category = _categoryFor(widget.guideType);
+  ItemColor? _color;
+  ItemStyle? _style;
+  bool _isFavorite = false;
+  bool _saving = false;
 
-  /// เดา category เริ่มต้นจาก guide type ที่เลือกตอนถ่าย
-  /// TODO: ให้ user แก้ไขเองได้ (เปลี่ยนเป็น dropdown/text field ทีหลัง)
-  String get _defaultCategory {
-    switch (widget.guideType) {
+  final TextEditingController _nameController = TextEditingController();
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  static ItemCategory _categoryFor(GuideType type) {
+    switch (type) {
       case GuideType.shirt:
       case GuideType.tshirt:
-        return 'Tops & Jackets';
+        return ItemCategory.tops;
       case GuideType.pants:
       case GuideType.short:
-        return 'Bottoms';
+        return ItemCategory.bottoms;
     }
   }
 
-  void _delete() {
-    // TODO: ลบไฟล์รูป temp ทิ้ง (ถ้ายังไม่ได้ copy ไป documents dir)
-    // pop กลับไปหน้ากล้องโดยไม่ส่งค่า save สำเร็จ (false)
-    // เพื่อให้หน้ากล้องรู้ว่าไม่ต้องปิดตัวเองต่อ ถ่ายใหม่ได้เลย
-    Navigator.of(context).pop(false);
+  /// ต้องเลือก color และ style ก่อนถึงจะบันทึกได้
+  bool get _canSave => _color != null && _style != null;
+
+  /// copy รูปเข้าตู้เสื้อผ้า + บันทึกข้อมูล แล้วปิดหน้านี้ (pop(true))
+  /// หน้ากล้องจะปิดตัวเองต่อ และหน้า home อัปเดตเองผ่าน ClosetRepository.items
+  Future<void> _save() async {
+    if (!_canSave || _saving) return;
+
+    final name = _nameController.text.trim();
+
+    if (name.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please enter a name'),
+        ),
+      );
+      return;
+    }
+
+    setState(() => _saving = true);
+
+    try {
+      await ClosetRepository.instance.add(
+        tempImagePath: widget.imagePath,
+        name: name,
+        category: _category,
+        color: _color!,
+        style: _style!,
+        isFavorite: _isFavorite,
+      );
+
+      if (mounted) {
+        Navigator.of(context).pop(true);
+      }
+    } catch (e) {
+      debugPrint('Save item error: $e');
+
+      if (!mounted) return;
+
+      setState(() => _saving = false);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('บันทึกไม่สำเร็จ ลองอีกครั้ง'),
+        ),
+      );
+    }
   }
 
-  void _save() {
-    // TODO:
-    // 1. copy widget.imagePath จาก temp -> app documents directory
-    // 2. สร้าง ClothingItem แล้วบันทึกลง storage จริง (sqflite/hive/...)
-    //
-    // ตอนนี้แค่ pop กลับพร้อม true เพื่อให้ align_items_screen รู้ว่า
-    // save สำเร็จแล้ว จะได้ pop ต่อกลับไปหน้า home เอง
-    Navigator.of(context).pop(true);
+  /// ถามยืนยันก่อนลบ แล้วลบไฟล์รูป temp และกลับไปหน้ากล้อง (ถ่ายใหม่ได้เลย)
+  Future<void> _confirmDelete() async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: _bg,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('Delete this item?'),
+        content: const Text('รูปที่ถ่ายไว้จะถูกลบและไม่สามารถกู้คืนได้'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel', style: TextStyle(color: _muted)),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Delete',
+              style: TextStyle(color: _danger, fontWeight: FontWeight.w700),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (ok != true) return;
+
+    try {
+      await File(widget.imagePath).delete();
+    } catch (e) {
+      debugPrint('Delete temp image failed: $e');
+    }
+
+    // pop(false) = ไม่ได้ save หน้ากล้องจึงไม่ปิดตัวเอง
+    if (mounted) Navigator.of(context).pop(false);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF5F1EA),
+      backgroundColor: _bg,
       body: SafeArea(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _TopBar(
-              onBack: () => Navigator.of(context).pop(),
-              onSave: _save,
-            ),
+            _TopBar(onBack: () => Navigator.of(context).pop(false)),
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _ItemImage(imagePath: widget.imagePath),
-                    const SizedBox(height: 20),
-                    _InfoRow(label: 'CATEGORY', value: _defaultCategory),
-                    const SizedBox(height: 10),
-                    // TODO: ดึงสีจริงจากรูป หรือให้ user เลือกเอง
-                    const _InfoRow(label: 'COLOR', value: '—'),
-                    const SizedBox(height: 16),
-                    Row(
-                      children: [
-                        _TagChip(
-                          label: 'Casual',
-                          selected: _selectedTag == ItemTag.casual,
-                          onTap: () => setState(() => _selectedTag =
-                              _selectedTag == ItemTag.casual
-                                  ? null
-                                  : ItemTag.casual),
-                        ),
-                        const SizedBox(width: 8),
-                        _TagChip(
-                          label: 'Formal',
-                          selected: _selectedTag == ItemTag.formal,
-                          onTap: () => setState(() => _selectedTag =
-                              _selectedTag == ItemTag.formal
-                                  ? null
-                                  : ItemTag.formal),
-                        ),
-                      ],
+                    _ItemImage(
+                      imagePath: widget.imagePath,
+                      isFavorite: _isFavorite,
+                      onToggleFavorite: () =>
+                          setState(() => _isFavorite = !_isFavorite),
                     ),
-                    const SizedBox(height: 24),
+
+                    const SizedBox(height: 28),
+
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        labelText: 'NAME',
+                        filled: true,
+                        fillColor: Colors.white,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          borderSide: const BorderSide(color: _border),
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    _SelectField<ItemCategory>(
+                      label: 'CATEGORY',
+                      placeholder: 'Select category',
+                      value: _category,
+                      options: ItemCategory.values,
+                      labelOf: (c) => c.label,
+                      onChanged: (v) => setState(() => _category = v),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    _SelectField<ItemColor>(
+                      label: 'COLOR',
+                      placeholder: 'Select color',
+                      value: _color,
+                      options: ItemColor.values,
+                      labelOf: (c) => c.label,
+                      leadingOf: (c) => _Swatch(color: c.swatch),
+                      onChanged: (v) => setState(() => _color = v),
+                    ),
+                    
+                    const SizedBox(height: 20),
+                    _SelectField<ItemStyle>(
+                      label: 'STYLE',
+                      placeholder: 'Select style',
+                      value: _style,
+                      options: ItemStyle.values,
+                      labelOf: (s) => s.label,
+                      onChanged: (v) => setState(() => _style = v),
+                    ),
                   ],
                 ),
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-              child: Align(
-                alignment: Alignment.centerRight,
-                child: IconButton(
-                  onPressed: _delete,
-                  icon: const Icon(Icons.delete_outline),
-                  color: const Color(0xFF8A847B),
-                  style: IconButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.fromLTRB(20, 8, 20, 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: _canSave && !_saving ? _save : null,
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          backgroundColor: _accent,
+                          foregroundColor: Colors.white,
+                          disabledBackgroundColor:
+                              _accent.withValues(alpha: 0.5),
+                          disabledForegroundColor:
+                              Colors.white.withValues(alpha: 0.8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          textStyle: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        child: const Text('Add to Closet'),
+                      ),
+                    ),
                   ),
-                ),
+                  const SizedBox(width: 12),
+                  // ปุ่มลบ อยู่มุมขวาล่างของจอ
+                  Material(
+                    color: Colors.white,
+                    shape: const CircleBorder(side: BorderSide(color: _border)),
+                    child: InkWell(
+                      customBorder: const CircleBorder(),
+                      onTap: _confirmDelete,
+                      child: const SizedBox(
+                        width: 56,
+                        height: 56,
+                        child: Icon(
+                          Icons.delete_outline,
+                          color: _danger,
+                          size: 24,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -135,32 +281,47 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
   }
 }
 
+// ============================================================
+// Widgets
+// ============================================================
+
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.onBack, required this.onSave});
+  const _TopBar({required this.onBack});
 
   final VoidCallback onBack;
-  final VoidCallback onSave;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Row(
+    return SizedBox(
+      height: 56,
+      child: Stack(
+        alignment: Alignment.center,
         children: [
-          IconButton(
-            onPressed: onBack,
-            icon: const Icon(Icons.arrow_back_ios_new, size: 18),
-          ),
-          const Expanded(
-            child: Text(
-              'Preview Item',
-              textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+          const Text(
+            'Save Item',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w500,
+              color: _ink,
+              fontFamily: 'Georgia',
+              fontFamilyFallback: ['Times New Roman', 'serif'],
             ),
           ),
-          IconButton(
-            onPressed: onSave,
-            icon: const Icon(Icons.check),
+          Positioned(
+            left: 16,
+            child: Material(
+              color: Colors.white,
+              shape: const CircleBorder(side: BorderSide(color: _border)),
+              child: InkWell(
+                customBorder: const CircleBorder(),
+                onTap: onBack,
+                child: const SizedBox(
+                  width: 36,
+                  height: 36,
+                  child: Icon(Icons.arrow_back_ios_new, size: 14, color: _ink),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -168,106 +329,273 @@ class _TopBar extends StatelessWidget {
   }
 }
 
+/// การ์ดแสดงรูปเสื้อผ้า (PNG โปร่งใส) บนพื้นครีม
 class _ItemImage extends StatelessWidget {
-  const _ItemImage({required this.imagePath});
+  const _ItemImage({
+    required this.imagePath,
+    required this.isFavorite,
+    required this.onToggleFavorite,
+  });
 
   final String imagePath;
+  final bool isFavorite;
+  final VoidCallback onToggleFavorite;
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: AspectRatio(
-        aspectRatio: 4 / 3,
-        child: Stack(
-          fit: StackFit.expand,
-          children: [
-            Container(color: const Color(0xFFE6E1D8)),
-            Image.file(File(imagePath), fit: BoxFit.contain),
-            Positioned(
-              top: 12,
-              right: 12,
-              child: CircleAvatar(
-                backgroundColor: Colors.white.withValues(alpha: 0.9),
-                child: const Icon(
-                  Icons.favorite_border,
-                  size: 18,
-                  color: Color(0xFF8A847B),
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(28),
+        border: Border.all(color: _border),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(18),
+        child: AspectRatio(
+          aspectRatio: 4 / 3,
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              const ColoredBox(color: Color(0xFFF1EEE3)),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: Image.file(File(imagePath), fit: BoxFit.contain),
+              ),
+              // ปุ่ม favorite (หัวใจ) มุมบนขวา
+              Positioned(
+                top: 10,
+                right: 10,
+                child: Material(
+                  color: Colors.white.withValues(alpha: 0.9),
+                  shape: const CircleBorder(),
+                  child: InkWell(
+                    customBorder: const CircleBorder(),
+                    onTap: onToggleFavorite,
+                    child: SizedBox(
+                      width: 38,
+                      height: 38,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 150),
+                        transitionBuilder: (child, anim) =>
+                            ScaleTransition(scale: anim, child: child),
+                        child: Icon(
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
+                          key: ValueKey(isFavorite),
+                          size: 20,
+                          color: isFavorite ? _danger : _muted,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
+/// วงกลมสี (other = วงกลมรุ้ง)
+class _Swatch extends StatelessWidget {
+  const _Swatch({required this.color, this.size = 22});
 
-  final String label;
-  final String value;
+  final Color? color;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Container(
+      width: size,
+      height: size,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: color,
+        gradient: color == null
+            ? const SweepGradient(colors: [
+                Color(0xFFE53935),
+                Color(0xFFFDD835),
+                Color(0xFF43A047),
+                Color(0xFF00ACC1),
+                Color(0xFF3949AB),
+                Color(0xFF8E24AA),
+                Color(0xFFE53935),
+              ])
+            : null,
+        // เส้นขอบบางๆ ให้เห็นสีขาว/ครีมบนพื้นสว่าง
+        border: Border.all(color: Colors.black.withValues(alpha: 0.15)),
+      ),
+    );
+  }
+}
+
+/// ช่องเลือกหน้าตาแบบ dropdown ตาม mockup กดแล้วเปิด bottom sheet ให้เลือก
+class _SelectField<T> extends StatelessWidget {
+  const _SelectField({
+    required this.label,
+    required this.placeholder,
+    required this.value,
+    required this.options,
+    required this.labelOf,
+    required this.onChanged,
+    this.leadingOf,
+  });
+
+  final String label;
+  final String placeholder;
+  final T? value;
+  final List<T> options;
+  final String Function(T) labelOf;
+  final Widget Function(T)? leadingOf;
+  final ValueChanged<T> onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    final v = value;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(
-          width: 90,
+        Padding(
+          padding: const EdgeInsets.only(left: 2, bottom: 8),
           child: Text(
             label,
             style: const TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.w600,
-              letterSpacing: 0.4,
-              color: Color(0xFF8A847B),
+              letterSpacing: 0.5,
+              color: _muted,
             ),
           ),
         ),
-        Text(
-          value,
-          style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+        Material(
+          color: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+            side: const BorderSide(color: _border),
+          ),
+          child: InkWell(
+            customBorder: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            onTap: () async {
+              final picked = await _showPicker<T>(
+                context,
+                title: label[0] + label.substring(1).toLowerCase(),
+                options: options,
+                selected: v,
+                labelOf: labelOf,
+                leadingOf: leadingOf,
+              );
+              if (picked != null) onChanged(picked);
+            },
+            child: Container(
+              height: 52,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
+                children: [
+                  if (v != null && leadingOf != null) ...[
+                    leadingOf!(v),
+                    const SizedBox(width: 10),
+                  ],
+                  Expanded(
+                    child: Text(
+                      v != null ? labelOf(v) : placeholder,
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: v != null ? _ink : _muted,
+                      ),
+                    ),
+                  ),
+                  const Icon(Icons.keyboard_arrow_down, color: _muted),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
     );
   }
 }
 
-class _TagChip extends StatelessWidget {
-  const _TagChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
+Future<T?> _showPicker<T>(
+  BuildContext context, {
+  required String title,
+  required List<T> options,
+  required T? selected,
+  required String Function(T) labelOf,
+  Widget Function(T)? leadingOf,
+}) {
+  return showModalBottomSheet<T>(
+    context: context,
+    isScrollControlled: true,
+    backgroundColor: _bg,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+    ),
+    builder: (ctx) {
+      final maxH = MediaQuery.of(ctx).size.height * 0.7;
 
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected ? const Color(0xFF2A211C) : Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: selected ? const Color(0xFF2A211C) : const Color(0xFFDDD6C9),
+      return SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxHeight: maxH),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(height: 10),
+              Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: _border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: _ink,
+                  ),
+                ),
+              ),
+              Flexible(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                  itemCount: options.length,
+                  itemBuilder: (_, i) {
+                    final o = options[i];
+                    final isSel = o == selected;
+                    return ListTile(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      tileColor: isSel ? Colors.white : null,
+                      leading: leadingOf?.call(o),
+                      title: Text(
+                        labelOf(o),
+                        style: TextStyle(
+                          fontWeight: isSel ? FontWeight.w700 : FontWeight.w500,
+                          color: _ink,
+                        ),
+                      ),
+                      trailing:
+                          isSel ? const Icon(Icons.check, color: _ink) : null,
+                      onTap: () => Navigator.pop(ctx, o),
+                    );
+                  },
+                ),
+              ),
+            ],
           ),
         ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            color: selected ? Colors.white : const Color(0xFF4A443E),
-          ),
-        ),
-      ),
-    );
-  }
+      );
+    },
+  );
 }
