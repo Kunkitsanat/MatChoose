@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/models/clothing_item.dart';
+import 'package:matchoose/screens/home/preview_item_screen.dart';
 
 
 class HomeScreen extends StatefulWidget {
@@ -169,6 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 onItemTap: (item) {
                   // TODO: ไปหน้ารายละเอียดของ item
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => PreviewItemScreen(item: item))
+                  );
                 },
               ),
           ],
