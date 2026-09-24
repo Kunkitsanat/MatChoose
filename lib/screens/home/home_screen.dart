@@ -4,22 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/models/clothing_item.dart';
 
-
-
-const _bg = Color(0xFFF7F5F0);
-const _border = Color(0xFFEAE5DA);
-const _cardBg = Color(0xFFEDE8DC);
-const _accent = Color(0xFFC4B29C);
-const _ink = Color(0xFF2A211C);
-const _muted = Color(0xFF8A847B);
-const _danger = Color(0xFFC0392B);
-
-const _serif = TextStyle(
-  fontFamily: 'Georgia',
-  fontFamilyFallback: ['Times New Roman', 'serif'],
-  color: _ink,
-);
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -82,8 +66,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+    final tt = theme.textTheme;
+
     return ColoredBox(
-      color: _bg,
+      color: theme.scaffoldBackgroundColor,
       child: SafeArea(
         child: Column(
           children: [
@@ -94,13 +82,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Header
                   Row(
                     children: [
-                      const Text(
+                      Text(
                         'Matchoose',
-                        style: TextStyle(
-                          fontFamily: 'Georgia',
-                          fontFamilyFallback: ['Times New Roman', 'serif'],
+                        style: tt.headlineMedium?.copyWith(
                           fontSize: 32,
-                          color: _ink,
+                          color: cs.onSurface,
                         ),
                       ),
                     ],
@@ -116,9 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           onPressed: () {
                             // TODO: ไปหน้า Recommend
                           },
+                          // สีมาจาก colorScheme.primary / onPrimary อัตโนมัติ
                           style: FilledButton.styleFrom(
-                            backgroundColor: _accent,
-                            foregroundColor: Colors.white,
                             minimumSize: const Size(0, 48),
                             shape: const StadiumBorder(),
                           ),
@@ -133,11 +118,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             // TODO: ไปหน้า Try Outfit
                           },
                           style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.white,
-                            foregroundColor: _ink,
+                            backgroundColor: cs.surface,
+                            foregroundColor: cs.onSurface,
                             minimumSize: const Size(0, 48),
                             shape: const StadiumBorder(),
-                            side: const BorderSide(color: _border),
+                            side: BorderSide(color: cs.outlineVariant),
                           ),
                           icon: const Icon(Icons.checkroom, size: 20),
                           label: const Text('Try Outfit'),
@@ -212,6 +197,9 @@ class _CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -220,13 +208,16 @@ class _CategorySection extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: Text(title, style: _serif.copyWith(fontSize: 22)),
+                child: Text(
+                  title,
+                  style: tt.titleLarge?.copyWith(color: cs.onSurface),
+                ),
               ),
               GestureDetector(
                 onTap: onSeeAll,
-                child: const Text(
+                child: Text(
                   'See all',
-                  style: TextStyle(fontSize: 14, color: _muted),
+                  style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                 ),
               ),
             ],
@@ -265,6 +256,9 @@ class _ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
@@ -280,16 +274,16 @@ class _ItemCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    const ColoredBox(color: _cardBg),
+                    ColoredBox(color: cs.surfaceContainerHigh),
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Image.file(
                         File(item.imagePath),
                         fit: BoxFit.contain,
                         cacheWidth: 330, // ลดการใช้ memory ตอนแสดงรูป thumbnail
-                        errorBuilder: (_, __, ___) => const Icon(
+                        errorBuilder: (_, __, ___) => Icon(
                           Icons.broken_image_outlined,
-                          color: _muted,
+                          color: cs.onSurfaceVariant,
                         ),
                       ),
                     ),
@@ -302,12 +296,12 @@ class _ItemCard extends StatelessWidget {
                           height: 24,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Colors.white.withValues(alpha: 0.9),
+                            color: cs.surface.withValues(alpha: 0.9),
                           ),
-                          child: const Icon(
+                          child: Icon(
                             Icons.favorite,
                             size: 14,
-                            color: _danger,
+                            color: cs.error,
                           ),
                         ),
                       ),
@@ -320,11 +314,11 @@ class _ItemCard extends StatelessWidget {
               item.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: const TextStyle(
+              style: tt.bodySmall?.copyWith(
                 fontSize: 13,
-                color: _ink,
+                color: cs.onSurface,
               ),
-),
+            ),
           ],
         ),
       ),
@@ -337,27 +331,32 @@ class _EmptyCloset extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    final cs = Theme.of(context).colorScheme;
+    final tt = Theme.of(context).textTheme;
+
+    return Center(
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 40),
+        padding: const EdgeInsets.symmetric(horizontal: 40),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.checkroom_outlined, size: 56, color: _accent),
-            SizedBox(height: 12),
+            Icon(Icons.checkroom_outlined, size: 56, color: cs.primary),
+            const SizedBox(height: 12),
             Text(
               'ยังไม่มีเสื้อผ้าในตู้',
-              style: TextStyle(
-                fontSize: 16,
+              style: tt.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
-                color: _ink,
+                color: cs.onSurface,
               ),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 4),
             Text(
               'กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: _muted),
+              style: tt.bodySmall?.copyWith(
+                fontSize: 13,
+                color: cs.onSurfaceVariant,
+              ),
             ),
           ],
         ),
