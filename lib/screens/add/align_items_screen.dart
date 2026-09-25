@@ -52,7 +52,14 @@ enum GuideType {
 // ============================================================
 
 class AlignItemsScreen extends StatefulWidget {
-  const AlignItemsScreen({super.key});
+  const AlignItemsScreen({super.key, this.imagePath});
+
+  /// ถ้ามีค่า = โหมดรูปจาก gallery (ข้ามกล้อง ใช้รูปนี้แทน)
+  /// ถ้าเป็น null = โหมดกล้อง (พฤติกรรมเดิม)
+  final String? imagePath;
+
+  /// true เมื่อมาจาก gallery (ไม่ต้องเปิดกล้อง)
+  bool get isGalleryMode => imagePath != null;
 
   @override
   State<AlignItemsScreen> createState() => _AlignItemsScreenState();
@@ -72,13 +79,67 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
   /// ขนาดพื้นที่ preview ล่าสุด (อัปเดตใน LayoutBuilder) ใช้ตอน crop
   Size _previewBox = Size.zero;
 
+  // ---------- gallery pan/zoom (เฉพาะโหมด gallery) ----------
+
+  /// ขนาดจริง (พิกเซล) ของรูปที่เลือกจาก gallery
+  Size? _galleryImageSize;
+
+  /// scale ที่ใช้ตอนวางรูปให้ cover พื้นที่ preview ครั้งแรก (ก่อนผู้ใช้ซูม/ลาก)
+  double? _coverScale;
+
+  /// true เมื่อคำนวณตำแหน่งเริ่มต้นของรูป (จัดกึ่งกลางแบบ cover) เสร็จแล้ว
+  bool _transformReady = false;
+
+  final TransformationController _transformController =
+      TransformationController();
+
   double get _aspect => _overlayAspect ?? _guide.fallbackAspect;
 
   @override
   void initState() {
     super.initState();
-    _initCamera();
+    if (widget.isGalleryMode) {
+      // โหมด gallery ไม่ต้องเปิดกล้อง แต่ต้องรู้ขนาดจริงของรูปก่อน
+      // เพื่อคำนวณตำแหน่งเริ่มต้น (cover) ให้ InteractiveViewer
+      _loadGalleryImageSize();
+    } else {
+      _initCamera();
+    }
     _loadGuide(_guide);
+  }
+
+  Future<void> _loadGalleryImageSize() async {
+    try {
+      final bytes = await File(widget.imagePath!).readAsBytes();
+      final image = await decodeImageFromList(bytes);
+      final size = Size(image.width.toDouble(), image.height.toDouble());
+      image.dispose();
+
+      if (!mounted) return;
+      setState(() => _galleryImageSize = size);
+    } catch (e) {
+      debugPrint('Load gallery image size failed: $e');
+    }
+  }
+
+  /// จัดรูปให้ cover พื้นที่ preview พอดีตอนเปิดหน้าครั้งแรก (เหมือนโหมดกล้อง)
+  /// เรียกครั้งเดียวหลังจากรู้ทั้งขนาดรูปและขนาดพื้นที่ preview แล้ว
+  void _initGalleryTransform() {
+    if (_transformReady) return;
+    final size = _galleryImageSize;
+    if (size == null || _previewBox.isEmpty) return;
+
+    final coverScale = _max(
+      _previewBox.width / size.width,
+      _previewBox.height / size.height,
+    );
+    final dx = (_previewBox.width - size.width * coverScale) / 2;
+    final dy = (_previewBox.height - size.height * coverScale) / 2;
+
+    _coverScale = coverScale;
+    _transformController.value = Matrix4.identity()..translate(dx, dy);
+
+    setState(() => _transformReady = true);
   }
 
   Future<void> _initCamera() async {
@@ -140,6 +201,7 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
   @override
   void dispose() {
     _controller?.dispose();
+    _transformController.dispose();
     super.dispose();
   }
 
@@ -161,12 +223,38 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
 
   // ---------- capture ----------
 
+  /// จุดเริ่มของทั้งสองโหมด: กล้อง -> ถ่ายรูปก่อนแล้ว crop, gallery -> crop
+  /// จากรูปที่เลือกไว้เลย ทั้งคู่ใช้สูตร crop/mask ชุดเดียวกัน (BoxFit.cover)
   Future<void> _takePhoto() async {
-    final c = _controller;
-    if (c == null || !c.value.isInitialized || c.value.isTakingPicture || _busy) {
+    if (_busy || _previewBox.isEmpty) return;
+
+    if (widget.isGalleryMode) {
+      setState(() {
+        _busy = true;
+        _menuOpen = false;
+      });
+
+      try {
+        final outPath = await _cropFromPath(widget.imagePath!);
+        if (!mounted) return;
+        await _goToSaveItem(outPath);
+      } catch (e) {
+        debugPrint('Crop error: $e');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('ประมวลผลรูปไม่สำเร็จ ลองอีกครั้ง')),
+          );
+        }
+      } finally {
+        if (mounted) setState(() => _busy = false);
+      }
       return;
     }
-    if (_previewBox.isEmpty) return;
+
+    final c = _controller;
+    if (c == null || !c.value.isInitialized || c.value.isTakingPicture) {
+      return;
+    }
 
     setState(() {
       _busy = true;
@@ -175,26 +263,7 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
 
     try {
       final photo = await c.takePicture();
-
-      // กรอบเส้นประอยู่กึ่งกลาง preview, พื้นที่ของ asset คือกรอบลบ padding
-      final frame = _guideSizeFor(_previewBox, _guide, _aspect);
-      final assetRect = Rect.fromLTWH(
-        (_previewBox.width - frame.width) / 2 + _kGuidePad,
-        (_previewBox.height - frame.height) / 2 + _kGuidePad,
-        frame.width - _kGuidePad * 2,
-        frame.height - _kGuidePad * 2,
-      );
-
-      final outPath = await compute(
-        _cropAndMask,
-        _CropRequest(
-          path: photo.path,
-          boxWidth: _previewBox.width,
-          boxHeight: _previewBox.height,
-          assetRect: assetRect,
-          overlayBytes: _overlayBytes,
-        ),
-      );
+      final outPath = await _cropFromPath(photo.path);
 
       if (!mounted) return;
       await _goToSaveItem(outPath);
@@ -210,9 +279,53 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
     }
   }
 
+  /// คำนวณตำแหน่ง asset บนพื้นที่ preview ปัจจุบัน แล้ว crop+mask รูปที่ [path]
+  ///
+  /// โหมดกล้อง: รูปวางแบบ BoxFit.cover คงที่เสมอ จึงคำนวณ scale/offset
+  /// อัตโนมัติใน _cropAndMask ได้เลย (เหมือนเดิม)
+  ///
+  /// โหมด gallery: ผู้ใช้ลาก/ซูมรูปเองผ่าน InteractiveViewer จึงต้องส่ง
+  /// scale และตำแหน่งจริง ณ ตอนกด shutter เข้าไปแทน (overrideScale/Offset)
+  Future<String> _cropFromPath(String path) {
+    final frame = _guideSizeFor(_previewBox, _guide, _aspect);
+    final assetRect = Rect.fromLTWH(
+      (_previewBox.width - frame.width) / 2 + _kGuidePad,
+      (_previewBox.height - frame.height) / 2 + _kGuidePad,
+      frame.width - _kGuidePad * 2,
+      frame.height - _kGuidePad * 2,
+    );
+
+    double? overrideScale;
+    Offset? overrideOffset;
+
+    if (widget.isGalleryMode) {
+      // matrix ของ InteractiveViewer แทนการ scale+translate แบบ affine
+      // (ไม่มี rotation) จึงดึง scale/translation ออกมาตรงๆ ได้
+      final matrix = _transformController.value;
+      final userScale = matrix.getMaxScaleOnAxis();
+      final translation = matrix.getTranslation();
+
+      overrideScale = (_coverScale ?? 1) * userScale;
+      overrideOffset = Offset(translation.x, translation.y);
+    }
+
+    return compute(
+      _cropAndMask,
+      _CropRequest(
+        path: path,
+        boxWidth: _previewBox.width,
+        boxHeight: _previewBox.height,
+        assetRect: assetRect,
+        overlayBytes: _overlayBytes,
+        overrideScale: overrideScale,
+        overrideOffset: overrideOffset,
+      ),
+    );
+  }
+
   /// ไปหน้า Preview/Save item พร้อมรูปที่ crop แล้ว + guide type ที่ใช้ถ่าย
   /// รอผลกลับ: ถ้าหน้านั้น pop กลับมาพร้อม `true` (save สำเร็จแล้ว)
-  /// ให้ปิดหน้ากล้องนี้ต่อไปอีกที ถ้า pop มาเฉยๆ (กดลบ/ย้อนกลับ) ก็ถ่ายใหม่ได้เลย
+  /// ให้ปิดหน้านี้ต่อไปอีกที ถ้า pop มาเฉยๆ (กดลบ/ย้อนกลับ) ก็แก้ไขใหม่ได้เลย
   Future<void> _goToSaveItem(String path) async {
     final saved = await Navigator.of(context).push<bool>(
       MaterialPageRoute(
@@ -234,7 +347,7 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // ===== ชั้น 1: กล้อง + guide (อยู่ในกรอบเดียวกัน) =====
+            // ===== ชั้น 1: กล้อง/รูป gallery + guide (อยู่ในกรอบเดียวกัน) =====
             Positioned.fill(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 70, 20, 160),
@@ -243,13 +356,21 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       _previewBox = constraints.biggest;
+
+                      if (widget.isGalleryMode && !_transformReady) {
+                        // เลื่อนไปทำหลังเฟรมนี้ เพราะการ set ค่า
+                        // TransformationController ระหว่าง build ไม่ปลอดภัย
+                        WidgetsBinding.instance
+                            .addPostFrameCallback((_) => _initGalleryTransform());
+                      }
+
                       final frame =
                           _guideSizeFor(_previewBox, _guide, _aspect);
 
                       return Stack(
                         fit: StackFit.expand,
                         children: [
-                          _buildCamera(),
+                          _buildPreview(),
                           Center(
                             child: IgnorePointer(
                               child: _GuideOverlay(
@@ -271,7 +392,10 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
               top: 8,
               left: 8,
               right: 8,
-              child: _TopBar(onBack: () => Navigator.maybePop(context)),
+              child: _TopBar(
+                title: widget.isGalleryMode ? 'Adjust Photo' : 'Align Outfit',
+                onBack: () => Navigator.maybePop(context),
+              ),
             ),
 
             // ===== ชั้น 3: shutter =====
@@ -280,7 +404,12 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
               left: 0,
               right: 0,
               child: Center(
-                child: _ShutterButton(busy: _busy, onTap: _takePhoto),
+                child: _ShutterButton(
+                  busy: _busy,
+                  onTap: _takePhoto,
+                  // gallery mode ไม่ได้ "ถ่าย" แต่เป็นการยืนยันตำแหน่ง
+                  icon: widget.isGalleryMode ? Icons.check : null,
+                ),
               ),
             ),
 
@@ -336,8 +465,40 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
   }
 
   /// preview แบบ "cover" เต็มพื้นที่ (ไม่มีขอบดำ)
-  /// สมมติว่าแอปล็อก portrait จึงสลับ width/height ของ previewSize
-  Widget _buildCamera() {
+  /// - โหมด gallery: แสดงรูปที่เลือกไว้ ด้วย BoxFit.cover ตรงๆ
+  /// - โหมดกล้อง: สมมติว่าแอปล็อก portrait จึงสลับ width/height ของ previewSize
+  Widget _buildPreview() {
+    if (widget.isGalleryMode) {
+      final size = _galleryImageSize;
+
+      // ระหว่างรอวัดขนาดรูป/พื้นที่ preview ให้โชว์แบบ cover เฉยๆ ไปก่อน
+      if (!_transformReady || size == null) {
+        return SizedBox.expand(
+          child: Image.file(File(widget.imagePath!), fit: BoxFit.cover),
+        );
+      }
+
+      // รูปถูกวางที่ขนาด cover-scale พอดี (coverScale * ขนาดจริง) แล้วให้
+      // InteractiveViewer จัดการ pan/zoom เพิ่มเติมจากตรงนั้น
+      return ClipRect(
+        child: InteractiveViewer(
+          transformationController: _transformController,
+          constrained: false,
+          minScale: 1,
+          maxScale: 4,
+          boundaryMargin: const EdgeInsets.all(double.infinity),
+          child: SizedBox(
+            width: size.width * _coverScale!,
+            height: size.height * _coverScale!,
+            child: Image.file(
+              File(widget.imagePath!),
+              fit: BoxFit.fill,
+            ),
+          ),
+        ),
+      );
+    }
+
     final c = _controller;
     if (c == null || !c.value.isInitialized) {
       return const ColoredBox(
@@ -371,6 +532,8 @@ class _CropRequest {
     required this.boxHeight,
     required this.assetRect,
     required this.overlayBytes,
+    this.overrideScale,
+    this.overrideOffset,
   });
 
   final String path;
@@ -384,9 +547,16 @@ class _CropRequest {
 
   /// ไบต์ของ overlay PNG (null = ไม่ทำ mask แค่ crop สี่เหลี่ยม)
   final Uint8List? overlayBytes;
+
+  /// ใช้แทนการคำนวณ BoxFit.cover อัตโนมัติ (โหมด gallery ที่ผู้ใช้
+  /// ลาก/ซูมรูปเอง) — ถ้า null จะคำนวณจาก boxWidth/boxHeight เทียบกับ
+  /// ขนาดรูปจริงเหมือนเดิม (โหมดกล้อง)
+  final double? overrideScale;
+  final Offset? overrideOffset;
 }
 
-/// 1) crop รูปถ่ายตามตำแหน่ง asset  2) ตัดพื้นหลังทิ้งด้วยรูปทรง asset
+/// 1) crop รูปตามตำแหน่ง asset  2) ตัดพื้นหลังทิ้งด้วยรูปทรง asset
+/// ใช้ได้ทั้งรูปจากกล้องและรูปจาก gallery (path ใดก็ได้ที่เป็นไฟล์ภาพ)
 /// คืน path ของไฟล์ PNG โปร่งใส
 String _cropAndMask(_CropRequest r) {
   final bytes = File(r.path).readAsBytesSync();
@@ -394,16 +564,17 @@ String _cropAndMask(_CropRequest r) {
   var photo = img.decodeImage(bytes);
   if (photo == null) throw Exception('decode photo failed');
 
-  // หมุนรูปตาม EXIF ให้ตรงกับที่เห็นใน preview
+  // หมุนรูปตาม EXIF ให้ตรงกับที่เห็นใน preview (ใช้ได้ทั้งรูปกล้องและ gallery)
   photo = img.bakeOrientation(photo);
 
   final iw = photo.width.toDouble();
   final ih = photo.height.toDouble();
 
-  // preview ใช้ BoxFit.cover: คำนวณ scale และ offset แบบเดียวกัน
-  final scale = _max(r.boxWidth / iw, r.boxHeight / ih);
-  final dx = (r.boxWidth - iw * scale) / 2;
-  final dy = (r.boxHeight - ih * scale) / 2;
+  // ถ้ามี override (โหมด gallery ที่ผู้ใช้ลาก/ซูมเอง) ใช้ค่านั้นแทน
+  // ไม่งั้นคำนวณจาก BoxFit.cover อัตโนมัติ (โหมดกล้อง)
+  final scale = r.overrideScale ?? _max(r.boxWidth / iw, r.boxHeight / ih);
+  final dx = r.overrideOffset?.dx ?? (r.boxWidth - iw * scale) / 2;
+  final dy = r.overrideOffset?.dy ?? (r.boxHeight - ih * scale) / 2;
 
   var x = ((r.assetRect.left - dx) / scale).round();
   var y = ((r.assetRect.top - dy) / scale).round();
@@ -701,9 +872,10 @@ class _MenuItem extends StatelessWidget {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({required this.onBack});
+  const _TopBar({required this.onBack, required this.title});
 
   final VoidCallback onBack;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -717,11 +889,11 @@ class _TopBar extends StatelessWidget {
             size: 18,
           ),
         ),
-        const Expanded(
+        Expanded(
           child: Text(
-            'Align Outfit',
+            title,
             textAlign: TextAlign.center,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 16,
               fontWeight: FontWeight.w600,
@@ -735,10 +907,13 @@ class _TopBar extends StatelessWidget {
 }
 
 class _ShutterButton extends StatelessWidget {
-  const _ShutterButton({required this.onTap, required this.busy});
+  const _ShutterButton({required this.onTap, required this.busy, this.icon});
 
   final VoidCallback onTap;
   final bool busy;
+
+  /// ไอคอนกลางปุ่ม (ใช้ในโหมด gallery เพื่อสื่อว่าเป็นการ "ยืนยัน" ไม่ใช่ถ่ายรูป)
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
@@ -746,7 +921,7 @@ class _ShutterButton extends StatelessWidget {
       onTap: busy ? null : onTap,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 150),
-        opacity: busy ? 0.5 : 1,
+        opacity: busy ? 0.6 : 1,
         child: Container(
           width: 68,
           height: 68,
@@ -758,6 +933,17 @@ class _ShutterButton extends StatelessWidget {
               width: 4,
             ),
           ),
+          child: busy
+              ? const Padding(
+                  padding: EdgeInsets.all(18),
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2.5,
+                    color: Color(0xFF2A211C),
+                  ),
+                )
+              : (icon == null
+                  ? null
+                  : Icon(icon, color: const Color(0xFF2A211C), size: 28)),
         ),
       ),
     );
