@@ -51,6 +51,7 @@ class PreviewItemScreen extends StatelessWidget {
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: cs.onSurface,
                               fontWeight: FontWeight.w500,
+                              fontSize: 20
                             ),
                           ),
                         ),
@@ -67,6 +68,7 @@ class PreviewItemScreen extends StatelessWidget {
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: cs.onSurface,
                                   fontWeight: FontWeight.w500,
+                                  fontSize: 20
                                 ),
                               ),
                             ],
@@ -235,10 +237,13 @@ class _InfoRow extends StatelessWidget {
     return Row(
       children: [
         SizedBox(
-          width: 88,
+          width: 100,
           child: Text(
             label,
-            style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
+            style: tt.bodySmall?.copyWith(
+              color: cs.onSurfaceVariant,
+              fontSize: 20
+              ),
           ),
         ),
         child,
@@ -259,8 +264,8 @@ class _ColorDot extends StatelessWidget {
     final swatch = color.swatch;
 
     return Container(
-      width: 14,
-      height: 14,
+      width: 30,
+      height: 30,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: swatch,
@@ -298,7 +303,10 @@ class _StyleChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: tt.bodySmall?.copyWith(color: cs.onSurface),
+        style: tt.bodySmall?.copyWith(
+          color: cs.onSurface,
+          fontSize: 18
+          ),
       ),
     );
   }
@@ -317,13 +325,13 @@ class _DeleteButton extends StatelessWidget {
       onTap: onPressed,
       customBorder: const CircleBorder(),
       child: Container(
-        width: 40,
-        height: 40,
+        width: 60,
+        height: 60,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           border: Border.all(color: cs.outlineVariant),
         ),
-        child: Icon(Icons.delete_outline, size: 20, color: cs.onSurfaceVariant),
+        child: Icon(Icons.delete_outline, size: 30, color: cs.onSurfaceVariant),
       ),
     );
   }
