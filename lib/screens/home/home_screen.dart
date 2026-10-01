@@ -5,6 +5,7 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 import 'package:matchoose/screens/home/recommend_screen.dart';
+import 'package:matchoose/screens/home/try_outfit_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -123,7 +124,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: OutlinedButton.icon(
                           onPressed: () {
-                            // TODO: ไปหน้า Try Outfit
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const TryOutfitScreen(),
+                              ),
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: cs.surface,
@@ -246,10 +252,8 @@ class _CategorySection extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20),
             itemCount: items.length,
             separatorBuilder: (_, __) => const SizedBox(width: 16),
-            itemBuilder: (_, i) => _ItemCard(
-              item: items[i],
-              onTap: () => onItemTap(items[i]),
-            ),
+            itemBuilder: (_, i) =>
+                _ItemCard(item: items[i], onTap: () => onItemTap(items[i])),
           ),
         ),
         const SizedBox(height: 20),
@@ -327,10 +331,7 @@ class _ItemCard extends StatelessWidget {
               item.name,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-              style: tt.bodySmall?.copyWith(
-                fontSize: 13,
-                color: cs.onSurface,
-              ),
+              style: tt.bodySmall?.copyWith(fontSize: 13, color: cs.onSurface),
             ),
           ],
         ),
