@@ -132,22 +132,11 @@ class ClosetRepository {
   }
 
   Future<void> toggleFavorite(String id) async {
-  items.value = [
-    for (final i in items.value)
-      i.id == id
-          ? ClothingItem(
-              id: i.id,
-              name: i.name,
-              imagePath: i.imagePath,
-              category: i.category,
-              color: i.color,
-              style: i.style,
-              createdAt: i.createdAt,
-              isFavorite: !i.isFavorite,
-            )
-          : i,
-  ];
-  await _persist();
+    items.value = [
+      for (final i in items.value)
+        i.id == id ? i.copyWith(isFavorite: !i.isFavorite) : i,
+    ];
+    await _persist();
   }
 
   Future<void> delete(String id) async {

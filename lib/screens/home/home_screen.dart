@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
-
+import 'package:matchoose/screens/home/recommend_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -50,6 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
       if (list.isNotEmpty) groups[c] = list;
     }
     return groups;
+  }
+
+  /// ไปหน้า Recommend (ชุดที่จับคู่ให้แล้ว)
+  void _openRecommend() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const RecommendScreen()),
+    );
   }
 
   // ============================================================
@@ -101,9 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Expanded(
                         child: FilledButton.icon(
-                          onPressed: () {
-                            // TODO: ไปหน้า Recommend
-                          },
+                          onPressed: _openRecommend,
                           // สีมาจาก colorScheme.primary / onPrimary อัตโนมัติ
                           style: FilledButton.styleFrom(
                             minimumSize: const Size(0, 48),
@@ -169,10 +175,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   // TODO: ไปหน้าดูทั้งหมดของหมวด entry.key
                 },
                 onItemTap: (item) {
-                  // TODO: ไปหน้ารายละเอียดของ item
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => PreviewItemScreen(item: item))
+                    MaterialPageRoute(
+                      builder: (_) => PreviewItemScreen(item: item),
+                    ),
                   );
                 },
               ),

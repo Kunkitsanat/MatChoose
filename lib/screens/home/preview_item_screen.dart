@@ -49,10 +49,9 @@ class PreviewItemScreen extends StatelessWidget {
                           child: Text(
                             current.category.label,
                             style: theme.textTheme.bodyMedium?.copyWith(
-                              color: cs.onSurface,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 20
-                            ),
+                                color: cs.onSurface,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20),
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -66,10 +65,9 @@ class PreviewItemScreen extends StatelessWidget {
                               Text(
                                 current.color.label,
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: cs.onSurface,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 20
-                                ),
+                                    color: cs.onSurface,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20),
                               ),
                             ],
                           ),
@@ -92,7 +90,8 @@ class PreviewItemScreen extends StatelessWidget {
     );
   }
 
-  Future<void> _confirmDelete(BuildContext context, ClothingItem current) async {
+  Future<void> _confirmDelete(
+      BuildContext context, ClothingItem current) async {
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -241,9 +240,7 @@ class _InfoRow extends StatelessWidget {
           child: Text(
             label,
             style: tt.bodySmall?.copyWith(
-              color: cs.onSurfaceVariant,
-              fontSize: 20
-              ),
+                color: cs.onSurfaceVariant, fontSize: 20),
           ),
         ),
         child,
@@ -303,10 +300,7 @@ class _StyleChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: tt.bodySmall?.copyWith(
-          color: cs.onSurface,
-          fontSize: 18
-          ),
+        style: tt.bodySmall?.copyWith(color: cs.onSurface, fontSize: 18),
       ),
     );
   }
