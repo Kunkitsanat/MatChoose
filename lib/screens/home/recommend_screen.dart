@@ -7,8 +7,7 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 import 'package:matchoose/services/recommendation_service.dart';
 
-/// หน้า Recommend: แสดงชุดที่จับคู่มาให้ (เสื้อ + กางเกง + รองเท้า)
-/// วางที่ lib/screens/home/recommend_screen.dart
+/// หน้า Recommend: แสดงชุดที่จับคู่มาให้ (เลื่อนซ้าย-ขวา, เสื้อ-กางเกง-รองเท้า เรียงแนวตั้ง)
 class RecommendScreen extends StatefulWidget {
   const RecommendScreen({super.key});
 
@@ -19,9 +18,17 @@ class RecommendScreen extends StatefulWidget {
 class _RecommendScreenState extends State<RecommendScreen> {
   static const _service = RecommendationService();
 
-  /// เปลี่ยน seed = สลับลำดับชุดที่คะแนนเท่ากัน (ปุ่ม shuffle)
-  /// ใช้ seed แทน Random() ตรงๆ เพื่อไม่ให้ชุดเปลี่ยนเองทุกครั้งที่ rebuild
   int _seed = DateTime.now().millisecondsSinceEpoch;
+  
+  // เพิ่ม PageController สำหรับเลื่อนซ้ายขวา
+  // viewportFraction: 0.88 ทำให้เห็นขอบของการ์ดซ้ายขวานิดๆ
+  final PageController _pageController = PageController(viewportFraction: 0.88);
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +41,13 @@ class _RecommendScreenState extends State<RecommendScreen> {
           children: [
             _Header(
               onBack: () => Navigator.maybePop(context),
-              onShuffle: () => setState(() => _seed++),
+              onShuffle: () {
+                setState(() => _seed++);
+                // กลับไปหน้าแรกเมื่อกด Shuffle
+                if (_pageController.hasClients) {
+                  _pageController.jumpToPage(0);
+                }
+              },
             ),
             Expanded(
               child: ValueListenableBuilder<List<ClothingItem>>(
@@ -47,23 +60,33 @@ class _RecommendScreenState extends State<RecommendScreen> {
 
                   if (outfits.isEmpty) return const _EmptyState();
 
-                  return ListView.separated(
-                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                  // เปลี่ยนจาก ListView เป็น PageView.builder
+                  return PageView.builder(
+                    controller: _pageController,
                     itemCount: outfits.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 16),
-                    itemBuilder: (_, i) => _OutfitCard(
-                      outfit: outfits[i],
-                      onItemTap: (item) => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PreviewItemScreen(item: item),
+                    itemBuilder: (context, i) {
+                      return Padding(
+                        // ใส่ padding ด้านข้างนิดหน่อยให้มีการเว้นระยะระหว่างการ์ด
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0, 
+                          vertical: 16.0
                         ),
-                      ),
-                    ),
+                        child: _OutfitCard(
+                          outfit: outfits[i],
+                          onItemTap: (item) => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => PreviewItemScreen(item: item),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   );
                 },
               ),
             ),
+            const SizedBox(height: 16), // เว้นระยะด้านล่าง
           ],
         ),
       ),
@@ -128,7 +151,7 @@ class _Header extends StatelessWidget {
   }
 }
 
-/// การ์ด 1 ชุด: รูปเสื้อ / กางเกง / รองเท้า เรียงแนวนอน
+/// การ์ด 1 ชุด: รูปเสื้อ / กางเกง / รองเท้า เรียงแนวตั้ง (Vertical Stack)
 class _OutfitCard extends StatelessWidget {
   const _OutfitCard({required this.outfit, required this.onItemTap});
 
@@ -141,43 +164,44 @@ class _OutfitCard extends StatelessWidget {
     final tt = Theme.of(context).textTheme;
 
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: cs.surface,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(32), // มนขึ้นอีกนิดให้เหมือน Card
         border: Border.all(color: cs.outlineVariant),
+        boxShadow: [
+          BoxShadow(
+            color: cs.shadow.withValues(alpha: 0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // ป้ายบอก Style 
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
               color: cs.primary.withValues(alpha: 0.14),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
               outfit.style.label,
-              style: tt.bodySmall?.copyWith(color: cs.onSurface),
+              style: tt.titleSmall?.copyWith(color: cs.primary),
             ),
           ),
+          const SizedBox(height: 16),
+          
+          // เปลี่ยนจาก Row เป็น Column 
+          Expanded(child: _PieceTile(item: outfit.top, onTap: onItemTap)),
           const SizedBox(height: 12),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: _PieceTile(item: outfit.top, onTap: onItemTap)),
-              const SizedBox(width: 10),
-              Expanded(
-                child: _PieceTile(item: outfit.bottom, onTap: onItemTap),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: outfit.shoes == null
-                    ? const SizedBox.shrink()
-                    : _PieceTile(item: outfit.shoes!, onTap: onItemTap),
-              ),
-            ],
-          ),
+          Expanded(child: _PieceTile(item: outfit.bottom, onTap: onItemTap)),
+          
+          if (outfit.shoes != null) ...[
+            const SizedBox(height: 12),
+            Expanded(child: _PieceTile(item: outfit.shoes!, onTap: onItemTap)),
+          ],
         ],
       ),
     );
@@ -193,50 +217,37 @@ class _PieceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    final tt = Theme.of(context).textTheme;
-
+    
+    // ถอด AspectRatio ออก ปล่อยให้มันขยายเต็มพื้นที่ Expanded ใน Column
     return GestureDetector(
       onTap: () => onTap(item),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
-            child: AspectRatio(
-              aspectRatio: 3 / 4,
-              child: Stack(
-                fit: StackFit.expand,
-                children: [
-                  ColoredBox(color: cs.surfaceContainerHigh),
-                  Padding(
-                    padding: const EdgeInsets.all(6),
-                    child: Image.file(
-                      File(item.imagePath),
-                      fit: BoxFit.contain,
-                      cacheWidth: 330,
-                      errorBuilder: (_, __, ___) => Icon(
-                        Icons.broken_image_outlined,
-                        color: cs.onSurfaceVariant,
-                      ),
-                    ),
+            borderRadius: BorderRadius.circular(20),
+            child: ColoredBox(
+              color: cs.surfaceContainerHigh,
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Image.file(
+                  File(item.imagePath),
+                  fit: BoxFit.contain, // ให้รูปพอดีกับกล่องโดยไม่โดนตัด
+                  errorBuilder: (_, __, ___) => Icon(
+                    Icons.broken_image_outlined,
+                    color: cs.onSurfaceVariant,
+                    size: 40,
                   ),
-                  if (item.isFavorite)
-                    Positioned(
-                      top: 6,
-                      right: 6,
-                      child: Icon(Icons.favorite, size: 14, color: cs.error),
-                    ),
-                ],
+                ),
               ),
             ),
           ),
-          const SizedBox(height: 6),
-          Text(
-            item.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: tt.bodySmall?.copyWith(fontSize: 12, color: cs.onSurface),
-          ),
+          if (item.isFavorite)
+            Positioned(
+              top: 12,
+              right: 12,
+              child: Icon(Icons.favorite, size: 20, color: cs.error),
+            ),
         ],
       ),
     );
