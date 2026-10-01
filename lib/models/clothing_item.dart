@@ -59,6 +59,69 @@ enum ItemColor {
 }
 
 // ============================================================
+// Color grouping (ใช้กับ RecommendationService)
+// ============================================================
+
+/// กลุ่มสี: neutral = เข้ากับทุกอย่าง, earth = โทนดิน,
+/// warm = โทนอุ่น, cool = โทนเย็น
+enum ColorGroup { neutral, earth, warm, cool, other }
+
+extension ItemColorX on ItemColor {
+  ColorGroup get group {
+    switch (this) {
+      case ItemColor.black:
+      case ItemColor.white:
+      case ItemColor.gray:
+      case ItemColor.silver:
+      case ItemColor.navy:
+        return ColorGroup.neutral;
+
+      case ItemColor.brown:
+      case ItemColor.tan:
+      case ItemColor.beige:
+      case ItemColor.cream:
+      case ItemColor.khaki:
+      case ItemColor.olive:
+        return ColorGroup.earth;
+
+      case ItemColor.red:
+      case ItemColor.burgundy:
+      case ItemColor.pink:
+      case ItemColor.coral:
+      case ItemColor.orange:
+      case ItemColor.peach:
+      case ItemColor.yellow:
+      case ItemColor.gold:
+        return ColorGroup.warm;
+
+      case ItemColor.green:
+      case ItemColor.mint:
+      case ItemColor.teal:
+      case ItemColor.blue:
+      case ItemColor.skyBlue:
+      case ItemColor.royalBlue:
+      case ItemColor.purple:
+      case ItemColor.lavender:
+        return ColorGroup.cool;
+
+      case ItemColor.other:
+        return ColorGroup.other;
+    }
+  }
+
+  /// สีจัดจ้าน (ไม่ควรใส่คู่กับสีจัดอีกสี)
+  bool get isBold => const {
+        ItemColor.red,
+        ItemColor.orange,
+        ItemColor.yellow,
+        ItemColor.royalBlue,
+        ItemColor.purple,
+        ItemColor.green,
+        ItemColor.coral,
+      }.contains(this);
+}
+
+// ============================================================
 // Model
 // ============================================================
 
@@ -86,4 +149,24 @@ class ClothingItem {
   final ItemStyle style;
   final bool isFavorite;
   final DateTime createdAt;
+
+  /// สร้างสำเนาพร้อมเปลี่ยนบาง field (เพิ่ม field ใหม่ในอนาคตแก้ที่นี่ที่เดียว)
+  ClothingItem copyWith({
+    String? name,
+    ItemCategory? category,
+    ItemColor? color,
+    ItemStyle? style,
+    bool? isFavorite,
+  }) {
+    return ClothingItem(
+      id: id,
+      name: name ?? this.name,
+      imagePath: imagePath,
+      category: category ?? this.category,
+      color: color ?? this.color,
+      style: style ?? this.style,
+      createdAt: createdAt,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }
