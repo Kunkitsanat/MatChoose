@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
+import 'package:matchoose/screens/home/outfit_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 
 /// หน้า Try Outfit: เลือกเสื้อผ้า Tops & Jackets -> Bottoms -> Shoes
@@ -61,13 +62,19 @@ class _TryOutfitScreenState extends State<TryOutfitScreen> {
     return result;
   }
 
-  void _saveOutfit(List<ClothingItem> all) {
+  Future<void> _saveOutfit(List<ClothingItem> all) async {
     final outfit = _selected(all);
     if (outfit.isEmpty) return;
 
-    // TODO: บันทึกชุดนี้ (เช่น OutfitRepository.add(outfit.map((e) => e.id)))
+    final saved = await OutfitRepository.instance.add(
+      itemIds: outfit.map((e) => e.id).toList(),
+    );
+
+    if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Outfit saved')),
+      SnackBar(
+        content: Text(saved == null ? 'Outfit already saved' : 'Outfit saved'),
+      ),
     );
   }
 
