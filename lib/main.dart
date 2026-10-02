@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'l10n/app_localizations.dart';
 
 import 'screens/main_screen.dart';
 
@@ -15,6 +16,14 @@ class MatchooseApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Matchoose',
+
+      localizationsDelegates:
+        AppLocalizations.localizationsDelegates,
+
+      supportedLocales:
+        AppLocalizations.supportedLocales,
+
+      locale: const Locale('th'),
 
       theme: ThemeData(
         textTheme: GoogleFonts.playfairDisplayTextTheme(),
