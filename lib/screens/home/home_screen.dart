@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+
 import 'package:flutter/material.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/models/clothing_item.dart';
@@ -81,6 +83,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return ColoredBox(
       color: theme.scaffoldBackgroundColor,
       child: SafeArea(
@@ -117,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: const StadiumBorder(),
                           ),
                           icon: const Icon(Icons.auto_awesome, size: 20),
-                          label: const Text('Recommend'),
+                          label: Text(l10n.recommend),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -139,7 +143,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             side: BorderSide(color: cs.outlineVariant),
                           ),
                           icon: const Icon(Icons.checkroom, size: 20),
-                          label: const Text('Try Outfit'),
+                          label: Text(l10n.tryOutfit),
                         ),
                       ),
                     ],
@@ -219,6 +223,8 @@ class _CategorySection extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -235,7 +241,7 @@ class _CategorySection extends StatelessWidget {
               GestureDetector(
                 onTap: onSeeAll,
                 child: Text(
-                  'See all',
+                  l10n.seeAll,
                   style: tt.bodyMedium?.copyWith(color: cs.onSurfaceVariant),
                 ),
               ),
@@ -348,6 +354,8 @@ class _EmptyCloset extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
 
+    final l10n = AppLocalizations.of(context)!;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
@@ -357,7 +365,7 @@ class _EmptyCloset extends StatelessWidget {
             Icon(Icons.checkroom_outlined, size: 56, color: cs.primary),
             const SizedBox(height: 12),
             Text(
-              'ยังไม่มีเสื้อผ้าในตู้',
+              l10n.emptyCloset,
               style: tt.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -365,7 +373,7 @@ class _EmptyCloset extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ',
+              l10n.emptyClosetHint,
               textAlign: TextAlign.center,
               style: tt.bodySmall?.copyWith(
                 fontSize: 13,

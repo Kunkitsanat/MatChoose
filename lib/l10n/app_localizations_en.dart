@@ -12,5 +12,14 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recommend => 'Recommend';
 
   @override
-  String get bottoms => 'Bottoms';
+  String get tryOutfit => 'Try Outfit';
+
+  @override
+  String get seeAll => 'See all';
+
+  @override
+  String get emptyCloset => 'Your closet is empty';
+
+  @override
+  String get emptyClosetHint => 'Tap + to take a photo and add your first item';
 }

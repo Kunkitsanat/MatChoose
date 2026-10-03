@@ -104,11 +104,29 @@ abstract class AppLocalizations {
   /// **'Recommend'**
   String get recommend;
 
-  /// No description provided for @bottoms.
+  /// No description provided for @tryOutfit.
   ///
   /// In en, this message translates to:
-  /// **'Bottoms'**
-  String get bottoms;
+  /// **'Try Outfit'**
+  String get tryOutfit;
+
+  /// No description provided for @seeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'See all'**
+  String get seeAll;
+
+  /// No description provided for @emptyCloset.
+  ///
+  /// In en, this message translates to:
+  /// **'Your closet is empty'**
+  String get emptyCloset;
+
+  /// No description provided for @emptyClosetHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to take a photo and add your first item'**
+  String get emptyClosetHint;
 }
 
 class _AppLocalizationsDelegate

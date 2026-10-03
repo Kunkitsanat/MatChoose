@@ -12,5 +12,14 @@ class AppLocalizationsTh extends AppLocalizations {
   String get recommend => 'แนะนำชุด';
 
   @override
-  String get bottoms => 'กางเกง';
+  String get tryOutfit => 'ลองชุด';
+
+  @override
+  String get seeAll => 'ดูทั้งหมด';
+
+  @override
+  String get emptyCloset => 'ยังไม่มีเสื้อผ้าในตู้';
+
+  @override
+  String get emptyClosetHint => 'กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ';
 }
