@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'home/home_screen.dart';
 import 'add/add_clothing_screen.dart';
 import 'search/search_screen.dart';
+import 'outfit/outfit_screen.dart';
+import 'setting/setting_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -12,7 +14,14 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Widget> _pages = [HomeScreen(), AddClothingScreen(), SearchScreen()];
+  final List<Widget> _pages = [
+    HomeScreen(),
+    OutfitScreen(),
+    AddClothingScreen(),
+    SearchScreen(),
+    SettingsScreen(),
+  ];
+
   int _currentIndex = 0;
 
   @override
@@ -36,6 +45,11 @@ class _MainScreenState extends State<MainScreen> {
           ),
 
           NavigationDestination(
+            icon: Icon(Icons.bookmark_border, size: 30),
+            label: '',
+          ),
+
+          NavigationDestination(
             icon: Icon(Icons.add, size: 30,),
             label: '',
           ),
@@ -44,6 +58,12 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.search, size:30,),
             label: '',
           ),
+
+          NavigationDestination(
+            icon: Icon(Icons.settings_outlined, size: 30),
+            label: '',
+          ),
+
         ],
       ),
     );
