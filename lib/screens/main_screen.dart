@@ -5,27 +5,38 @@ import 'add/add_clothing_screen.dart';
 import 'search/search_screen.dart';
 import 'outfit/outfit_screen.dart';
 import 'setting/setting_screen.dart';
+import 'package:matchoose/models/app_language.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  const MainScreen({
+    super.key,
+    required this.selectedLanguage,
+    required this.onLanguageChanged,
+  });
+
+  final AppLanguage selectedLanguage;
+  final ValueChanged<AppLanguage> onLanguageChanged;
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final List<Widget> _pages = [
-    HomeScreen(),
-    OutfitScreen(),
-    AddClothingScreen(),
-    SearchScreen(),
-    SettingsScreen(),
-  ];
-
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = [
+      HomeScreen(),
+      OutfitScreen(),
+      AddClothingScreen(),
+      SearchScreen(),
+      SettingsScreen(
+        selectedLanguage: widget.selectedLanguage,
+        onLanguageChanged: widget.onLanguageChanged,
+      ),
+    ];
+
     return Scaffold(
       body: _pages[_currentIndex],
 

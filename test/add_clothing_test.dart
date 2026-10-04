@@ -3,12 +3,19 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:matchoose/screens/add/add_clothing_screen.dart';
 import 'package:matchoose/screens/main_screen.dart';
-
+import 'package:matchoose/models/app_language.dart';
 
 void main() {
   testWidgets('Go to Add Clothing Screen', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MaterialApp(home: MainScreen()));
+    await tester.pumpWidget(
+      MaterialApp(
+        home: MainScreen(
+          selectedLanguage: AppLanguage.system,
+          onLanguageChanged: (value) {},
+        ),
+      ),
+    );
 
     await tester.tap(find.byIcon(Icons.add));
     await tester.pumpAndSettle();
