@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:matchoose/screens/add/align_items_screen.dart';
 
-
+import 'package:matchoose/l10n/app_localizations.dart';
 
 class AddClothingScreen extends StatelessWidget {
   const AddClothingScreen({super.key});
@@ -38,6 +38,8 @@ class AddClothingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
@@ -46,7 +48,10 @@ class AddClothingScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text('Add Clothing', style: TextStyle(fontSize: 24.0)),
+                Text(
+                  l10n.addClothing,
+                  style: TextStyle(fontSize: 24.0)
+                ),
               ],
             ),
             Expanded(
@@ -67,12 +72,12 @@ class AddClothingScreen extends StatelessWidget {
                           backgroundColor: Colors.brown.shade200,
                           foregroundColor: Colors.white,
                         ),
-                        child: const Column(
+                        child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.add_photo_alternate, size: 32),
                             SizedBox(height: 8),
-                            Text('From Gallery'),
+                            Text(l10n.fromGallery),
                           ],
                         ),
                       ),
@@ -96,12 +101,12 @@ class AddClothingScreen extends StatelessWidget {
                           backgroundColor: Colors.brown.shade200,
                           foregroundColor: Colors.white,
                         ),
-                        child: const Column(
+                        child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Icon(Icons.add_a_photo, size: 32),
                             SizedBox(height: 8),
-                            Text('Take a Photo'),
+                            Text(l10n.takePhoto),
                           ],
                         ),
                       ),

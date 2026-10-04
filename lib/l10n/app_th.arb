@@ -1,8 +1,13 @@
 {
   "@@locale": "th",
+
   "recommend": "แนะนำชุด",
   "tryOutfit": "ลองชุด",
   "seeAll": "ดูทั้งหมด",
   "emptyCloset": "ยังไม่มีเสื้อผ้าในตู้",
-  "emptyClosetHint": "กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ"
+  "emptyClosetHint": "กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ",
+
+  "addClothing": "เพิ่มเสื้อผ้า",
+  "fromGallery": "จากแกลเลอรี",
+  "takePhoto": "ถ่ายรูป"
 }

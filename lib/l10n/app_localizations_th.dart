@@ -22,4 +22,13 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get emptyClosetHint => 'กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ';
+
+  @override
+  String get addClothing => 'เพิ่มเสื้อผ้า';
+
+  @override
+  String get fromGallery => 'จากแกลเลอรี';
+
+  @override
+  String get takePhoto => 'ถ่ายรูป';
 }

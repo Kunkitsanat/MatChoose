@@ -1,8 +1,13 @@
 {
   "@@locale": "en",
+
   "recommend": "Recommend",
   "tryOutfit": "Try Outfit",
   "seeAll": "See all",
   "emptyCloset": "Your closet is empty",
-  "emptyClosetHint": "Tap + to take a photo and add your first item"
+  "emptyClosetHint": "Tap + to take a photo and add your first item",
+
+  "addClothing": "Add Clothing",
+  "fromGallery": "From Gallery",
+  "takePhoto": "Take a Photo"
 }

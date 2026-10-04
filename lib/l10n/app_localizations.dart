@@ -127,6 +127,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Tap + to take a photo and add your first item'**
   String get emptyClosetHint;
+
+  /// No description provided for @addClothing.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Clothing'**
+  String get addClothing;
+
+  /// No description provided for @fromGallery.
+  ///
+  /// In en, this message translates to:
+  /// **'From Gallery'**
+  String get fromGallery;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a Photo'**
+  String get takePhoto;
 }
 
 class _AppLocalizationsDelegate
