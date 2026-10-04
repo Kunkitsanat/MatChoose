@@ -86,6 +86,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ],
                 ),
               ),
+
+              SizedBox(height: 10,),
+              
+              // Font size setting card
+              Card(
+                child: Column(
+                  children: [
+                    ListTile(
+                      leading: Icon(Icons.format_size),
+                      title: Text('Font size'),
+                    ),
+
+                    // ใส่ตั้งค่าขนาดฟอนต์
+                  ]
+                )
+              ),
+
             ],
           ),
         ),
