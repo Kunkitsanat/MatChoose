@@ -1,7 +1,4 @@
-// test/home_screen_test.dart
-//
-// ทดสอบหน้า HomeScreen แบบง่ายๆ: การแสดงผลและการกดปุ่มหลัก
-//   flutter test test/home_screen_test.dart
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
