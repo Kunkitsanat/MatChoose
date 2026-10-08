@@ -437,6 +437,7 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
 
             // ===== ชั้น 6: เมนูเลือก guide มุมขวาบน =====
             Positioned(
+              key: const Key('guide_menu'),
               top: 56,
               right: 20,
               child: AnimatedSwitcher(
@@ -918,6 +919,7 @@ class _ShutterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: const Key('shutter_button'),
       onTap: busy ? null : onTap,
       child: AnimatedOpacity(
         duration: const Duration(milliseconds: 150),
@@ -959,6 +961,7 @@ class _ElementsButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      key: const Key('elements_button'),
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 150),
