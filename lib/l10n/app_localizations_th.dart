@@ -31,4 +31,22 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get takePhoto => 'ถ่ายรูป';
+
+  @override
+  String get fontSize => 'ขนาดตัวอักษร';
+
+  @override
+  String get fontSizeSystem => 'ตามระบบ';
+
+  @override
+  String get fontSizeSmall => 'เล็ก';
+
+  @override
+  String get fontSizeNormal => 'ปกติ';
+
+  @override
+  String get fontSizeLarge => 'ใหญ่';
+
+  @override
+  String get fontSizeExtraLarge => 'ใหญ่มาก';
 }

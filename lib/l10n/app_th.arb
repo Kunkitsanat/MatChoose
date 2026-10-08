@@ -9,5 +9,12 @@
 
   "addClothing": "เพิ่มเสื้อผ้า",
   "fromGallery": "จากแกลเลอรี",
-  "takePhoto": "ถ่ายรูป"
+  "takePhoto": "ถ่ายรูป",
+
+  "fontSize": "ขนาดตัวอักษร",
+  "fontSizeSystem": "ตามระบบ",
+  "fontSizeSmall": "เล็ก",
+  "fontSizeNormal": "ปกติ",
+  "fontSizeLarge": "ใหญ่",
+  "fontSizeExtraLarge": "ใหญ่มาก"
 }

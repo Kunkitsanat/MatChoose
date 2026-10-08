@@ -9,5 +9,12 @@
 
   "addClothing": "Add Clothing",
   "fromGallery": "From Gallery",
-  "takePhoto": "Take a Photo"
+  "takePhoto": "Take a Photo",
+
+  "fontSize": "Font size",
+  "fontSizeSystem": "System default",
+  "fontSizeSmall": "Small",
+  "fontSizeNormal": "Normal",
+  "fontSizeLarge": "Large",
+  "fontSizeExtraLarge": "Extra large"
 }

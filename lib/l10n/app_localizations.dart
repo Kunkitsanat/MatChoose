@@ -145,6 +145,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Take a Photo'**
   String get takePhoto;
+
+  /// No description provided for @fontSize.
+  ///
+  /// In en, this message translates to:
+  /// **'Font size'**
+  String get fontSize;
+
+  /// No description provided for @fontSizeSystem.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get fontSizeSystem;
+
+  /// No description provided for @fontSizeSmall.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get fontSizeSmall;
+
+  /// No description provided for @fontSizeNormal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get fontSizeNormal;
+
+  /// No description provided for @fontSizeLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get fontSizeLarge;
+
+  /// No description provided for @fontSizeExtraLarge.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra large'**
+  String get fontSizeExtraLarge;
 }
 
 class _AppLocalizationsDelegate

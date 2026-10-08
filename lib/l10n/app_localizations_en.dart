@@ -31,4 +31,22 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get takePhoto => 'Take a Photo';
+
+  @override
+  String get fontSize => 'Font size';
+
+  @override
+  String get fontSizeSystem => 'System default';
+
+  @override
+  String get fontSizeSmall => 'Small';
+
+  @override
+  String get fontSizeNormal => 'Normal';
+
+  @override
+  String get fontSizeLarge => 'Large';
+
+  @override
+  String get fontSizeExtraLarge => 'Extra large';
 }
