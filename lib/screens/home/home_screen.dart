@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:matchoose/l10n/app_localizations.dart';
+import 'package:matchoose/l10n/clothing_localizations.dart';
 
 import 'package:flutter/material.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
@@ -170,6 +171,8 @@ class _HomeScreenState extends State<HomeScreen> {
     return ValueListenableBuilder<List<ClothingItem>>(
       valueListenable: _closet.items,
       builder: (context, items, _) {
+        final l10n = AppLocalizations.of(context)!;
+        
         if (items.isEmpty) return const _EmptyCloset();
 
         final groups = _groupByCategory(items);
@@ -179,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             for (final entry in groups.entries)
               _CategorySection(
-                title: entry.key.label,
+                title: entry.key.localizedLabel(l10n),
                 items: entry.value,
                 onSeeAll: () {
                   // TODO: ไปหน้าดูทั้งหมดของหมวด entry.key
