@@ -6,6 +6,7 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 
 import 'package:matchoose/l10n/app_localizations.dart';
+import 'package:matchoose/l10n/clothing_localizations.dart';
 
 class SearchResultScreen extends StatelessWidget {
   const SearchResultScreen({
@@ -213,6 +214,7 @@ class _ResultItemCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return GestureDetector(
       key: Key('search_item_${item.id}'),
@@ -286,7 +288,7 @@ class _ResultItemCard extends StatelessWidget {
           const SizedBox(height: 2),
 
           Text(
-            '${item.category.label} • ${item.color.label}',
+            '${item.category.localizedLabel(l10n)} • ${item.color.localizedLabel(l10n)}',
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: tt.bodySmall?.copyWith(
