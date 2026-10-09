@@ -6,6 +6,8 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/home/outfit_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+
 /// หน้า Try Outfit: เลือกเสื้อผ้า Tops & Jackets -> Bottoms -> Shoes
 /// แต่ละแถวเลื่อนซ้าย-ขวาได้ กดที่รูปเพื่อไปหน้า Preview
 /// วางที่ lib/screens/home/try_outfit_screen.dart
@@ -71,9 +73,14 @@ class _TryOutfitScreenState extends State<TryOutfitScreen> {
     );
 
     if (!mounted) return;
+
+    final l10n = AppLocalizations.of(context)!;
+
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(saved == null ? 'Outfit already saved' : 'Outfit saved'),
+        content: Text(
+          saved == null ? l10n.outfitAlreadySaved : l10n.outfitSaved,
+        ),
       ),
     );
   }
@@ -105,6 +112,7 @@ class _TryOutfitScreenState extends State<TryOutfitScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -150,7 +158,7 @@ class _TryOutfitScreenState extends State<TryOutfitScreen> {
                       shape: const StadiumBorder(),
                     ),
                     icon: const Icon(Icons.bookmark_border, size: 20),
-                    label: const Text('Save Outfit'),
+                    label: Text(l10n.saveOutfit),
                   ),
                 ),
               ],
@@ -175,6 +183,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -200,7 +209,7 @@ class _Header extends StatelessWidget {
               ),
             ),
             Text(
-              'Try Outfit',
+              l10n.tryOutfit,
               style: tt.titleMedium?.copyWith(color: cs.onSurface),
             ),
           ],
@@ -230,11 +239,18 @@ class _ItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
+
+    final categoryLabel = switch (category) {
+      ItemCategory.tops => l10n.topsAndJackets,
+      ItemCategory.bottoms => l10n.bottoms,
+      ItemCategory.shoes => l10n.shoes,
+    };
 
     if (items.isEmpty) {
       return Center(
         child: Text(
-          'ยังไม่มี ${category.label}',
+          l10n.noItemsInCategory(categoryLabel),
           style: tt.bodySmall?.copyWith(color: cs.onSurfaceVariant),
         ),
       );

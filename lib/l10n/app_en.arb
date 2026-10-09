@@ -7,6 +7,29 @@
   "emptyCloset": "Your closet is empty",
   "emptyClosetHint": "Tap + to take a photo and add your first item",
 
+  "saveOutfit": "Save Outfit",
+  "outfitSaved": "Outfit saved",
+  "outfitAlreadySaved": "Outfit already saved",
+
+  "unableToRecommend": "Unable to create an outfit",
+  "unableToRecommendHint": "You need at least 1 top and 1 bottom with the same style and matching colors.",
+
+  "topsAndJackets": "Tops & Jackets",
+  "bottoms": "Bottoms",
+  "shoes": "Shoes",
+
+  "casualWear": "Casual Wear",
+  "formalWear": "Formal Wear",
+
+  "noItemsInCategory": "No {category} yet",
+  "@noItemsInCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+
   "addClothing": "Add Clothing",
   "fromGallery": "From Gallery",
   "takePhoto": "Take a Photo",

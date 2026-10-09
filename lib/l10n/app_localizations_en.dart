@@ -24,6 +24,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get emptyClosetHint => 'Tap + to take a photo and add your first item';
 
   @override
+  String get saveOutfit => 'Save Outfit';
+
+  @override
+  String get outfitSaved => 'Outfit saved';
+
+  @override
+  String get outfitAlreadySaved => 'Outfit already saved';
+
+  @override
+  String get unableToRecommend => 'Unable to create an outfit';
+
+  @override
+  String get unableToRecommendHint =>
+      'You need at least 1 top and 1 bottom with the same style and matching colors.';
+
+  @override
+  String get topsAndJackets => 'Tops & Jackets';
+
+  @override
+  String get bottoms => 'Bottoms';
+
+  @override
+  String get shoes => 'Shoes';
+
+  @override
+  String get casualWear => 'Casual Wear';
+
+  @override
+  String get formalWear => 'Formal Wear';
+
+  @override
+  String noItemsInCategory(String category) {
+    return 'No $category yet';
+  }
+
+  @override
   String get addClothing => 'Add Clothing';
 
   @override

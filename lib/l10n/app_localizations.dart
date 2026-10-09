@@ -128,6 +128,72 @@ abstract class AppLocalizations {
   /// **'Tap + to take a photo and add your first item'**
   String get emptyClosetHint;
 
+  /// No description provided for @saveOutfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Outfit'**
+  String get saveOutfit;
+
+  /// No description provided for @outfitSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Outfit saved'**
+  String get outfitSaved;
+
+  /// No description provided for @outfitAlreadySaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Outfit already saved'**
+  String get outfitAlreadySaved;
+
+  /// No description provided for @unableToRecommend.
+  ///
+  /// In en, this message translates to:
+  /// **'Unable to create an outfit'**
+  String get unableToRecommend;
+
+  /// No description provided for @unableToRecommendHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You need at least 1 top and 1 bottom with the same style and matching colors.'**
+  String get unableToRecommendHint;
+
+  /// No description provided for @topsAndJackets.
+  ///
+  /// In en, this message translates to:
+  /// **'Tops & Jackets'**
+  String get topsAndJackets;
+
+  /// No description provided for @bottoms.
+  ///
+  /// In en, this message translates to:
+  /// **'Bottoms'**
+  String get bottoms;
+
+  /// No description provided for @shoes.
+  ///
+  /// In en, this message translates to:
+  /// **'Shoes'**
+  String get shoes;
+
+  /// No description provided for @casualWear.
+  ///
+  /// In en, this message translates to:
+  /// **'Casual Wear'**
+  String get casualWear;
+
+  /// No description provided for @formalWear.
+  ///
+  /// In en, this message translates to:
+  /// **'Formal Wear'**
+  String get formalWear;
+
+  /// No description provided for @noItemsInCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'No {category} yet'**
+  String noItemsInCategory(String category);
+
   /// No description provided for @addClothing.
   ///
   /// In en, this message translates to:

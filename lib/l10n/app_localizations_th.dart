@@ -24,6 +24,42 @@ class AppLocalizationsTh extends AppLocalizations {
   String get emptyClosetHint => 'กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ';
 
   @override
+  String get saveOutfit => 'บันทึกชุด';
+
+  @override
+  String get outfitSaved => 'บันทึกชุดแล้ว';
+
+  @override
+  String get outfitAlreadySaved => 'ชุดนี้ถูกบันทึกไว้แล้ว';
+
+  @override
+  String get unableToRecommend => 'ยังจับคู่ชุดไม่ได้';
+
+  @override
+  String get unableToRecommendHint =>
+      'ต้องมีเสื้อและกางเกงที่มีสไตล์เดียวกันและสีเข้ากันอย่างน้อยอย่างละ 1 ชิ้น';
+
+  @override
+  String get topsAndJackets => 'เสื้อและแจ็กเก็ต';
+
+  @override
+  String get bottoms => 'กางเกง';
+
+  @override
+  String get shoes => 'รองเท้า';
+
+  @override
+  String get casualWear => 'ชุดลำลอง';
+
+  @override
+  String get formalWear => 'ชุดทางการ';
+
+  @override
+  String noItemsInCategory(String category) {
+    return 'ยังไม่มี$category';
+  }
+
+  @override
   String get addClothing => 'เพิ่มเสื้อผ้า';
 
   @override

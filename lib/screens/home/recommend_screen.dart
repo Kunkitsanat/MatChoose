@@ -7,6 +7,8 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 import 'package:matchoose/services/recommendation_service.dart';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+
 /// หน้า Recommend: แสดงชุดที่จับคู่มาให้ (เลื่อนซ้าย-ขวา, เสื้อ-กางเกง-รองเท้า เรียงแนวตั้ง)
 class RecommendScreen extends StatefulWidget {
   const RecommendScreen({super.key});
@@ -19,7 +21,7 @@ class _RecommendScreenState extends State<RecommendScreen> {
   static const _service = RecommendationService();
 
   int _seed = DateTime.now().millisecondsSinceEpoch;
-  
+
   // เพิ่ม PageController สำหรับเลื่อนซ้ายขวา
   // viewportFraction: 0.88 ทำให้เห็นขอบของการ์ดซ้ายขวานิดๆ
   final PageController _pageController = PageController(viewportFraction: 0.88);
@@ -68,8 +70,8 @@ class _RecommendScreenState extends State<RecommendScreen> {
                       return Padding(
                         // ใส่ padding ด้านข้างนิดหน่อยให้มีการเว้นระยะระหว่างการ์ด
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 8.0, 
-                          vertical: 16.0
+                          horizontal: 8.0,
+                          vertical: 16.0,
                         ),
                         child: _OutfitCard(
                           outfit: outfits[i],
@@ -108,6 +110,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     Widget circleButton(IconData icon, VoidCallback onTap) {
       return InkWell(
@@ -137,7 +140,7 @@ class _Header extends StatelessWidget {
               child: circleButton(Icons.chevron_left, onBack),
             ),
             Text(
-              'Recommend',
+              l10n.recommend,
               style: tt.titleMedium?.copyWith(color: cs.onSurface),
             ),
             Align(
@@ -162,6 +165,7 @@ class _OutfitCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -179,7 +183,7 @@ class _OutfitCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // ป้ายบอก Style 
+          // ป้ายบอก Style
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
             decoration: BoxDecoration(
@@ -187,17 +191,20 @@ class _OutfitCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              outfit.style.label,
+              switch (outfit.style) {
+                ItemStyle.casual => l10n.casualWear,
+                ItemStyle.formal => l10n.formalWear,
+              },
               style: tt.titleSmall?.copyWith(color: cs.primary),
             ),
           ),
           const SizedBox(height: 16),
-          
-          // เปลี่ยนจาก Row เป็น Column 
+
+          // เปลี่ยนจาก Row เป็น Column
           Expanded(child: _PieceTile(item: outfit.top, onTap: onItemTap)),
           const SizedBox(height: 12),
           Expanded(child: _PieceTile(item: outfit.bottom, onTap: onItemTap)),
-          
+
           if (outfit.shoes != null) ...[
             const SizedBox(height: 12),
             Expanded(child: _PieceTile(item: outfit.shoes!, onTap: onItemTap)),
@@ -217,7 +224,7 @@ class _PieceTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
-    
+
     // ถอด AspectRatio ออก ปล่อยให้มันขยายเต็มพื้นที่ Expanded ใน Column
     return GestureDetector(
       onTap: () => onTap(item),
@@ -261,6 +268,7 @@ class _EmptyState extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
@@ -271,7 +279,7 @@ class _EmptyState extends StatelessWidget {
             Icon(Icons.auto_awesome_outlined, size: 56, color: cs.primary),
             const SizedBox(height: 12),
             Text(
-              'ยังจับคู่ชุดไม่ได้',
+              l10n.unableToRecommend,
               style: tt.titleMedium?.copyWith(
                 fontWeight: FontWeight.w600,
                 color: cs.onSurface,
@@ -279,8 +287,7 @@ class _EmptyState extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'ต้องมีเสื้อและกางเกงที่ style เดียวกัน และสีเข้ากัน '
-              'อย่างน้อยอย่างละ 1 ชิ้น',
+              l10n.unableToRecommendHint,
               textAlign: TextAlign.center,
               style: tt.bodySmall?.copyWith(
                 fontSize: 13,

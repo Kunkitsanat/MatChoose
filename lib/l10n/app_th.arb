@@ -7,6 +7,29 @@
   "emptyCloset": "ยังไม่มีเสื้อผ้าในตู้",
   "emptyClosetHint": "กดปุ่ม + เพื่อถ่ายรูปและเพิ่มชิ้นแรกของคุณ",
 
+  "saveOutfit": "บันทึกชุด",
+  "outfitSaved": "บันทึกชุดแล้ว",
+  "outfitAlreadySaved": "ชุดนี้ถูกบันทึกไว้แล้ว",
+
+  "unableToRecommend": "ยังจับคู่ชุดไม่ได้",
+  "unableToRecommendHint": "ต้องมีเสื้อและกางเกงที่มีสไตล์เดียวกันและสีเข้ากันอย่างน้อยอย่างละ 1 ชิ้น",
+
+  "topsAndJackets": "เสื้อและแจ็กเก็ต",
+  "bottoms": "กางเกง",
+  "shoes": "รองเท้า",
+
+  "casualWear": "ชุดลำลอง",
+  "formalWear": "ชุดทางการ",
+
+  "noItemsInCategory": "ยังไม่มี{category}",
+  "@noItemsInCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+
   "addClothing": "เพิ่มเสื้อผ้า",
   "fromGallery": "จากแกลเลอรี",
   "takePhoto": "ถ่ายรูป",
