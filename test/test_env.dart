@@ -1,3 +1,12 @@
+// test/helpers/test_env.dart
+//
+// ตัวช่วยที่ใช้ร่วมกันในเทสของ home / preview / recommend / try outfit
+//
+// ต้องเพิ่มใน pubspec.yaml:
+//   dev_dependencies:
+//     path_provider_platform_interface: any
+//     plugin_platform_interface: any
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -64,10 +73,11 @@ ClothingItem testItem({
       createdAt: DateTime(2024, 1, 1),
     );
 
-MaterialApp _app(Widget home) => MaterialApp(
+MaterialApp _app(Widget home, {Locale locale = const Locale('en')}) =>
+    MaterialApp(
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('en'),
+      locale: locale,
       home: home,
     );
 
@@ -92,9 +102,13 @@ void _ignoreOverflowErrors() {
 }
 
 /// แสดงหน้าเป็น root
-Future<void> pumpRoot(WidgetTester tester, Widget screen) async {
+Future<void> pumpRoot(
+  WidgetTester tester,
+  Widget screen, {
+  Locale locale = const Locale('en'),
+}) async {
   usePhoneScreen(tester);
-  await tester.pumpWidget(_app(screen));
+  await tester.pumpWidget(_app(screen, locale: locale));
   await tester.pumpAndSettle();
 }
 
