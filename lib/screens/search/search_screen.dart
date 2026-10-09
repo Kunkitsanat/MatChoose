@@ -4,6 +4,8 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 
 import 'search_result_screen.dart';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
 
@@ -49,6 +51,7 @@ class _SearchScreenState extends State<SearchScreen> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return ColoredBox(
       color: theme.scaffoldBackgroundColor,
@@ -60,7 +63,7 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               Center(
                 child: Text(
-                  'Search',
+                  l10n.search,
                   style: tt.titleLarge?.copyWith(
                     fontSize: 24,
                     color: cs.onSurface,
@@ -71,11 +74,11 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: 30),
 
               // NAME
-              const _FieldLabel('NAME'),
+              _FieldLabel(l10n.name),
               TextField(
                 controller: _nameController,
                 decoration: InputDecoration(
-                  hintText: 'Search by name',
+                  hintText: l10n.searchByName,
                   filled: true,
                   fillColor: cs.surface,
                   contentPadding: const EdgeInsets.symmetric(
@@ -100,10 +103,10 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: 18),
 
               // CATEGORY
-              const _FieldLabel('CATEGORY'),
+              _FieldLabel(l10n.category),
               _FilterDropdown<ItemCategory>(
                 value: _category,
-                emptyLabel: 'All Categories',
+                emptyLabel: l10n.allCategories,
                 values: ItemCategory.values,
                 labelOf: (item) => item.label,
                 onChanged: (value) {
@@ -116,10 +119,10 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: 18),
 
               // COLOR
-              const _FieldLabel('COLOR'),
+              _FieldLabel(l10n.color),
               _FilterDropdown<ItemColor>(
                 value: _color,
-                emptyLabel: 'Any Color',
+                emptyLabel: l10n.anyColor,
                 values: ItemColor.values,
                 labelOf: (item) => item.label,
                 onChanged: (value) {
@@ -132,10 +135,10 @@ class _SearchScreenState extends State<SearchScreen> {
               const SizedBox(height: 18),
 
               // STYLE
-              const _FieldLabel('FORMAL/CASUAL'),
+              _FieldLabel(l10n.formality),
               _FilterDropdown<ItemStyle>(
                 value: _style,
-                emptyLabel: 'All Styles',
+                emptyLabel: l10n.allStyles,
                 values: ItemStyle.values,
                 labelOf: (item) => item.label,
                 onChanged: (value) {
@@ -169,7 +172,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       });
                     },
                     child: Text(
-                      'Favorites Only',
+                      l10n.favoritesOnly,
                       style: tt.bodyMedium?.copyWith(
                         color: cs.onSurface,
                       ),

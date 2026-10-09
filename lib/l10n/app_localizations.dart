@@ -146,6 +146,66 @@ abstract class AppLocalizations {
   /// **'Take a Photo'**
   String get takePhoto;
 
+  /// No description provided for @search.
+  ///
+  /// In en, this message translates to:
+  /// **'Search'**
+  String get search;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'NAME'**
+  String get name;
+
+  /// No description provided for @searchByName.
+  ///
+  /// In en, this message translates to:
+  /// **'Search by name'**
+  String get searchByName;
+
+  /// No description provided for @category.
+  ///
+  /// In en, this message translates to:
+  /// **'CATEGORY'**
+  String get category;
+
+  /// No description provided for @allCategories.
+  ///
+  /// In en, this message translates to:
+  /// **'All categories'**
+  String get allCategories;
+
+  /// No description provided for @color.
+  ///
+  /// In en, this message translates to:
+  /// **'COLOR'**
+  String get color;
+
+  /// No description provided for @anyColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Any Color'**
+  String get anyColor;
+
+  /// No description provided for @formality.
+  ///
+  /// In en, this message translates to:
+  /// **'FORMALITY'**
+  String get formality;
+
+  /// No description provided for @allStyles.
+  ///
+  /// In en, this message translates to:
+  /// **'All Styles'**
+  String get allStyles;
+
+  /// No description provided for @favoritesOnly.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites Only'**
+  String get favoritesOnly;
+
   /// No description provided for @fontSize.
   ///
   /// In en, this message translates to:

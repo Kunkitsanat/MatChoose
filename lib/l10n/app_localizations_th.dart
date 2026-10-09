@@ -33,6 +33,36 @@ class AppLocalizationsTh extends AppLocalizations {
   String get takePhoto => 'ถ่ายรูป';
 
   @override
+  String get search => 'ค้นหา';
+
+  @override
+  String get name => 'ชื่อ';
+
+  @override
+  String get searchByName => 'ค้นหาจากชื่อ';
+
+  @override
+  String get category => 'ประเภท';
+
+  @override
+  String get allCategories => 'ทุกประเภท';
+
+  @override
+  String get color => 'สี';
+
+  @override
+  String get anyColor => 'สีอะไรก็ได้';
+
+  @override
+  String get formality => 'ความเป็นทางการ';
+
+  @override
+  String get allStyles => 'ทุกสไตล์';
+
+  @override
+  String get favoritesOnly => 'รายการโปรดเท่านั้น';
+
+  @override
   String get fontSize => 'ขนาดตัวอักษร';
 
   @override

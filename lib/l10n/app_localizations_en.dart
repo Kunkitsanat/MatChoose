@@ -33,6 +33,36 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takePhoto => 'Take a Photo';
 
   @override
+  String get search => 'Search';
+
+  @override
+  String get name => 'NAME';
+
+  @override
+  String get searchByName => 'Search by name';
+
+  @override
+  String get category => 'CATEGORY';
+
+  @override
+  String get allCategories => 'All categories';
+
+  @override
+  String get color => 'COLOR';
+
+  @override
+  String get anyColor => 'Any Color';
+
+  @override
+  String get formality => 'FORMALITY';
+
+  @override
+  String get allStyles => 'All Styles';
+
+  @override
+  String get favoritesOnly => 'Favorites Only';
+
+  @override
   String get fontSize => 'Font size';
 
   @override

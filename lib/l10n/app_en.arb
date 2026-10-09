@@ -11,6 +11,17 @@
   "fromGallery": "From Gallery",
   "takePhoto": "Take a Photo",
 
+  "search": "Search",
+  "name": "NAME",
+  "searchByName": "Search by name",
+  "category": "CATEGORY",
+  "allCategories": "All categories",
+  "color": "COLOR",
+  "anyColor": "Any Color",
+  "formality": "FORMALITY",
+  "allStyles": "All Styles",
+  "favoritesOnly": "Favorites Only",
+
   "fontSize": "Font size",
   "fontSizeSystem": "System default",
   "fontSizeSmall": "Small",

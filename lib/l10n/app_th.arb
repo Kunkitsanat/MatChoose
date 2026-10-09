@@ -11,6 +11,17 @@
   "fromGallery": "จากแกลเลอรี",
   "takePhoto": "ถ่ายรูป",
 
+  "search": "ค้นหา",
+  "name": "ชื่อ",
+  "searchByName": "ค้นหาจากชื่อ",
+  "category": "ประเภท",
+  "allCategories": "ทุกประเภท",
+  "color": "สี",
+  "anyColor": "สีอะไรก็ได้",
+  "formality": "ความเป็นทางการ",
+  "allStyles": "ทุกสไตล์",
+  "favoritesOnly": "รายการโปรดเท่านั้น",
+
   "fontSize": "ขนาดตัวอักษร",
   "fontSizeSystem": "ตามระบบ",
   "fontSizeSmall": "เล็ก",
