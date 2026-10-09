@@ -105,7 +105,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noClothesFound => 'No clothes found';
 
   @override
-  String get noClothesFoundHint => 'Try adjusting your search fliters.';
+  String get noClothesFoundHint => 'Try adjusting your search filters.';
 
   @override
   String get item => 'item';
@@ -115,6 +115,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get found => 'found';
+
+  @override
+  String get previewItem => 'Preview Item';
+
+  @override
+  String get deleteItem => 'Delete this item?';
+
+  @override
+  String get deleteItemHint => 'It will be removed from your closet.';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get delete => 'Delete';
 
   @override
   String get fontSize => 'Font size';
@@ -133,4 +148,88 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get fontSizeExtraLarge => 'Extra large';
+
+  @override
+  String get colorBlack => 'Black';
+
+  @override
+  String get colorWhite => 'White';
+
+  @override
+  String get colorGray => 'Gray';
+
+  @override
+  String get colorSilver => 'Silver';
+
+  @override
+  String get colorRed => 'Red';
+
+  @override
+  String get colorBurgundy => 'Burgundy';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorCoral => 'Coral';
+
+  @override
+  String get colorOrange => 'Orange';
+
+  @override
+  String get colorPeach => 'Peach';
+
+  @override
+  String get colorYellow => 'Yellow';
+
+  @override
+  String get colorGold => 'Gold';
+
+  @override
+  String get colorGreen => 'Green';
+
+  @override
+  String get colorOlive => 'Olive';
+
+  @override
+  String get colorMint => 'Mint';
+
+  @override
+  String get colorTeal => 'Teal';
+
+  @override
+  String get colorBlue => 'Blue';
+
+  @override
+  String get colorSkyBlue => 'Sky Blue';
+
+  @override
+  String get colorNavy => 'Navy';
+
+  @override
+  String get colorRoyalBlue => 'Royal Blue';
+
+  @override
+  String get colorPurple => 'Purple';
+
+  @override
+  String get colorLavender => 'Lavender';
+
+  @override
+  String get colorBrown => 'Brown';
+
+  @override
+  String get colorTan => 'Tan';
+
+  @override
+  String get colorBeige => 'Beige';
+
+  @override
+  String get colorCream => 'Cream';
+
+  @override
+  String get colorKhaki => 'Khaki';
+
+  @override
+  String get colorOther => 'Other';
 }

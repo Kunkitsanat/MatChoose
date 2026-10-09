@@ -117,6 +117,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get found => 'ที่ค้นพบ';
 
   @override
+  String get previewItem => 'ดูเสื้อผ้า';
+
+  @override
+  String get deleteItem => 'ลบเสื้อผ้าชิ้นนี้?';
+
+  @override
+  String get deleteItemHint => 'เสื้อผ้าชิ้นนี้จะถูกนำออกจากตู้ของคุณ';
+
+  @override
+  String get cancel => 'ยกเลิก';
+
+  @override
+  String get delete => 'ลบ';
+
+  @override
   String get fontSize => 'ขนาดตัวอักษร';
 
   @override
@@ -133,4 +148,88 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get fontSizeExtraLarge => 'ใหญ่มาก';
+
+  @override
+  String get colorBlack => 'ดำ';
+
+  @override
+  String get colorWhite => 'ขาว';
+
+  @override
+  String get colorGray => 'เทา';
+
+  @override
+  String get colorSilver => 'เงิน';
+
+  @override
+  String get colorRed => 'แดง';
+
+  @override
+  String get colorBurgundy => 'แดงเบอร์กันดี';
+
+  @override
+  String get colorPink => 'ชมพู';
+
+  @override
+  String get colorCoral => 'คอรัล';
+
+  @override
+  String get colorOrange => 'ส้ม';
+
+  @override
+  String get colorPeach => 'พีช';
+
+  @override
+  String get colorYellow => 'เหลือง';
+
+  @override
+  String get colorGold => 'ทอง';
+
+  @override
+  String get colorGreen => 'เขียว';
+
+  @override
+  String get colorOlive => 'เขียวมะกอก';
+
+  @override
+  String get colorMint => 'มิ้นต์';
+
+  @override
+  String get colorTeal => 'เขียวน้ำทะเล';
+
+  @override
+  String get colorBlue => 'น้ำเงิน';
+
+  @override
+  String get colorSkyBlue => 'ฟ้า';
+
+  @override
+  String get colorNavy => 'กรมท่า';
+
+  @override
+  String get colorRoyalBlue => 'รอยัลบลู';
+
+  @override
+  String get colorPurple => 'ม่วง';
+
+  @override
+  String get colorLavender => 'ลาเวนเดอร์';
+
+  @override
+  String get colorBrown => 'น้ำตาล';
+
+  @override
+  String get colorTan => 'แทน';
+
+  @override
+  String get colorBeige => 'เบจ';
+
+  @override
+  String get colorCream => 'ครีม';
+
+  @override
+  String get colorKhaki => 'กากี';
+
+  @override
+  String get colorOther => 'อื่น ๆ';
 }

@@ -287,7 +287,7 @@ abstract class AppLocalizations {
   /// No description provided for @noClothesFoundHint.
   ///
   /// In en, this message translates to:
-  /// **'Try adjusting your search fliters.'**
+  /// **'Try adjusting your search filters.'**
   String get noClothesFoundHint;
 
   /// No description provided for @item.
@@ -307,6 +307,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'found'**
   String get found;
+
+  /// No description provided for @previewItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview Item'**
+  String get previewItem;
+
+  /// No description provided for @deleteItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this item?'**
+  String get deleteItem;
+
+  /// No description provided for @deleteItemHint.
+  ///
+  /// In en, this message translates to:
+  /// **'It will be removed from your closet.'**
+  String get deleteItemHint;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
 
   /// No description provided for @fontSize.
   ///
@@ -343,6 +373,174 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Extra large'**
   String get fontSizeExtraLarge;
+
+  /// No description provided for @colorBlack.
+  ///
+  /// In en, this message translates to:
+  /// **'Black'**
+  String get colorBlack;
+
+  /// No description provided for @colorWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'White'**
+  String get colorWhite;
+
+  /// No description provided for @colorGray.
+  ///
+  /// In en, this message translates to:
+  /// **'Gray'**
+  String get colorGray;
+
+  /// No description provided for @colorSilver.
+  ///
+  /// In en, this message translates to:
+  /// **'Silver'**
+  String get colorSilver;
+
+  /// No description provided for @colorRed.
+  ///
+  /// In en, this message translates to:
+  /// **'Red'**
+  String get colorRed;
+
+  /// No description provided for @colorBurgundy.
+  ///
+  /// In en, this message translates to:
+  /// **'Burgundy'**
+  String get colorBurgundy;
+
+  /// No description provided for @colorPink.
+  ///
+  /// In en, this message translates to:
+  /// **'Pink'**
+  String get colorPink;
+
+  /// No description provided for @colorCoral.
+  ///
+  /// In en, this message translates to:
+  /// **'Coral'**
+  String get colorCoral;
+
+  /// No description provided for @colorOrange.
+  ///
+  /// In en, this message translates to:
+  /// **'Orange'**
+  String get colorOrange;
+
+  /// No description provided for @colorPeach.
+  ///
+  /// In en, this message translates to:
+  /// **'Peach'**
+  String get colorPeach;
+
+  /// No description provided for @colorYellow.
+  ///
+  /// In en, this message translates to:
+  /// **'Yellow'**
+  String get colorYellow;
+
+  /// No description provided for @colorGold.
+  ///
+  /// In en, this message translates to:
+  /// **'Gold'**
+  String get colorGold;
+
+  /// No description provided for @colorGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Green'**
+  String get colorGreen;
+
+  /// No description provided for @colorOlive.
+  ///
+  /// In en, this message translates to:
+  /// **'Olive'**
+  String get colorOlive;
+
+  /// No description provided for @colorMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get colorMint;
+
+  /// No description provided for @colorTeal.
+  ///
+  /// In en, this message translates to:
+  /// **'Teal'**
+  String get colorTeal;
+
+  /// No description provided for @colorBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue'**
+  String get colorBlue;
+
+  /// No description provided for @colorSkyBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Sky Blue'**
+  String get colorSkyBlue;
+
+  /// No description provided for @colorNavy.
+  ///
+  /// In en, this message translates to:
+  /// **'Navy'**
+  String get colorNavy;
+
+  /// No description provided for @colorRoyalBlue.
+  ///
+  /// In en, this message translates to:
+  /// **'Royal Blue'**
+  String get colorRoyalBlue;
+
+  /// No description provided for @colorPurple.
+  ///
+  /// In en, this message translates to:
+  /// **'Purple'**
+  String get colorPurple;
+
+  /// No description provided for @colorLavender.
+  ///
+  /// In en, this message translates to:
+  /// **'Lavender'**
+  String get colorLavender;
+
+  /// No description provided for @colorBrown.
+  ///
+  /// In en, this message translates to:
+  /// **'Brown'**
+  String get colorBrown;
+
+  /// No description provided for @colorTan.
+  ///
+  /// In en, this message translates to:
+  /// **'Tan'**
+  String get colorTan;
+
+  /// No description provided for @colorBeige.
+  ///
+  /// In en, this message translates to:
+  /// **'Beige'**
+  String get colorBeige;
+
+  /// No description provided for @colorCream.
+  ///
+  /// In en, this message translates to:
+  /// **'Cream'**
+  String get colorCream;
+
+  /// No description provided for @colorKhaki.
+  ///
+  /// In en, this message translates to:
+  /// **'Khaki'**
+  String get colorKhaki;
+
+  /// No description provided for @colorOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get colorOther;
 }
 
 class _AppLocalizationsDelegate

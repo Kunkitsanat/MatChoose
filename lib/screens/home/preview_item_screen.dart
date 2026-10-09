@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+import 'package:matchoose/l10n/clothing_localizations.dart';
+
 /// หน้า Preview Item (view clothes) ตามดีไซน์ Figma "preview-clothes"
 /// วางที่ lib/screens/home/preview_item_screen.dart
 class PreviewItemScreen extends StatelessWidget {
@@ -16,6 +19,7 @@ class PreviewItemScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final closet = ClosetRepository.instance;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -45,9 +49,9 @@ class PreviewItemScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 20),
                         _InfoRow(
-                          label: 'Category',
+                          label: l10n.category,
                           child: Text(
-                            current.category.label,
+                            current.category.localizedLabel(l10n),
                             style: theme.textTheme.bodyMedium?.copyWith(
                                 color: cs.onSurface,
                                 fontWeight: FontWeight.w500,
@@ -56,14 +60,14 @@ class PreviewItemScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 12),
                         _InfoRow(
-                          label: 'Color',
+                          label: l10n.color,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               _ColorDot(color: current.color),
                               const SizedBox(width: 8),
                               Text(
-                                current.color.label,
+                                current.color.localizedLabel(l10n),
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                     color: cs.onSurface,
                                     fontWeight: FontWeight.w500,
@@ -73,7 +77,9 @@ class PreviewItemScreen extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        _StyleChip(label: current.style.label),
+                        _StyleChip(
+                          label: current.style.localizedLabel(l10n),
+                        ),
                         const SizedBox(height: 24),
                         _DeleteButton(
                           onPressed: () => _confirmDelete(context, current),
@@ -92,19 +98,21 @@ class PreviewItemScreen extends StatelessWidget {
 
   Future<void> _confirmDelete(
       BuildContext context, ClothingItem current) async {
+    final l10n = AppLocalizations.of(context)!;
+
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Delete this item?'),
-        content: const Text('It will be removed from your closet.'),
+        title: Text(l10n.deleteItem),
+        content: Text(l10n.deleteItemHint),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Delete'),
+            child: Text(l10n.delete),
           ),
         ],
       ),
@@ -129,6 +137,7 @@ class _Header extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -154,7 +163,7 @@ class _Header extends StatelessWidget {
               ),
             ),
             Text(
-              'Preview Item',
+              l10n.previewItem,
               style: tt.titleMedium?.copyWith(color: cs.onSurface),
             ),
           ],
