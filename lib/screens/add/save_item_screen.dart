@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'align_items_screen.dart' show GuideType;
 import 'closet_repository.dart';
 import 'package:matchoose/models/clothing_item.dart';
+import 'package:matchoose/l10n/app_localizations.dart';
+import 'package:matchoose/l10n/clothing_localizations.dart';
 
 // ============================================================
 // Screen
@@ -73,12 +75,13 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
   Future<void> _save() async {
     if (!_canSave || _saving) return;
 
+    final l10n = AppLocalizations.of(context)!;
     final name = _nameController.text.trim();
 
     if (name.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Please enter a name'),
+        SnackBar(
+          content: Text(l10n.pleaseEnterName),
         ),
       );
       return;
@@ -107,8 +110,8 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
       setState(() => _saving = false);
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('บันทึกไม่สำเร็จ ลองอีกครั้ง'),
+        SnackBar(
+          content: Text(l10n.saveItemFailed),
         ),
       );
     }
@@ -116,23 +119,25 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
 
   /// ถามยืนยันก่อนลบ แล้วลบไฟล์รูป temp และกลับไปหน้ากล้อง (ถ่ายใหม่ได้เลย)
   Future<void> _confirmDelete() async {
+    final l10n = AppLocalizations.of(context)!;
+
     final ok = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: _bg,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Delete this item?'),
-        content: const Text('รูปที่ถ่ายไว้จะถูกลบและไม่สามารถกู้คืนได้'),
+        title: Text(l10n.deleteItem),
+        content: Text(l10n.deleteCapturedPhotoHint),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel', style: TextStyle(color: _muted)),
+            child: Text(l10n.cancel, style: const TextStyle(color: _muted)),
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
-              'Delete',
-              style: TextStyle(color: _danger, fontWeight: FontWeight.w700),
+            child: Text(
+              l10n.delete,
+              style: const TextStyle(color: _danger, fontWeight: FontWeight.w700),
             ),
           ),
         ],
@@ -153,6 +158,8 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: _bg,
       body: SafeArea(
@@ -177,7 +184,7 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
                     TextField(
                       controller: _nameController,
                       decoration: InputDecoration(
-                        labelText: 'NAME',
+                        labelText: l10n.name,
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
@@ -190,33 +197,33 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
                     const SizedBox(height: 20),
 
                     _SelectField<ItemCategory>(
-                      label: 'CATEGORY',
-                      placeholder: 'Select category',
+                      label: l10n.category,
+                      placeholder: l10n.selectCategory,
                       value: _category,
                       options: ItemCategory.values,
-                      labelOf: (c) => c.label,
+                      labelOf: (c) => c.localizedLabel(l10n),
                       onChanged: (v) => setState(() => _category = v),
                     ),
 
                     const SizedBox(height: 20),
 
                     _SelectField<ItemColor>(
-                      label: 'COLOR',
-                      placeholder: 'Select color',
+                      label: l10n.color,
+                      placeholder: l10n.selectColor,
                       value: _color,
                       options: ItemColor.values,
-                      labelOf: (c) => c.label,
+                      labelOf: (c) => c.localizedLabel(l10n),
                       leadingOf: (c) => _Swatch(color: c.swatch),
                       onChanged: (v) => setState(() => _color = v),
                     ),
-                    
+
                     const SizedBox(height: 20),
                     _SelectField<ItemStyle>(
-                      label: 'STYLE',
-                      placeholder: 'Select style',
+                      label: l10n.style,
+                      placeholder: l10n.selectStyle,
                       value: _style,
                       options: ItemStyle.values,
-                      labelOf: (s) => s.label,
+                      labelOf: (s) => s.localizedLabel(l10n),
                       onChanged: (v) => setState(() => _style = v),
                     ),
                   ],
@@ -248,7 +255,7 @@ class _SaveItemScreenState extends State<SaveItemScreen> {
                             fontWeight: FontWeight.w700,
                           ),
                         ),
-                        child: const Text('Add to Closet'),
+                        child: Text(l10n.addToCloset),
                       ),
                     ),
                   ),
@@ -292,15 +299,17 @@ class _TopBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return SizedBox(
       width: double.infinity,
       height: 56,
       child: Stack(
         alignment: Alignment.center,
         children: [
-          const Text(
-            'Save Item',
-            style: TextStyle(
+          Text(
+            l10n.saveItem,
+            style: const TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w500,
               color: _ink,

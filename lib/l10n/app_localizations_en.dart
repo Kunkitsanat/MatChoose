@@ -69,6 +69,34 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takePhoto => 'Take a Photo';
 
   @override
+  String get saveItem => 'Save Item';
+
+  @override
+  String get style => 'STYLE';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get selectColor => 'Select color';
+
+  @override
+  String get selectStyle => 'Select style';
+
+  @override
+  String get addToCloset => 'Add to Closet';
+
+  @override
+  String get pleaseEnterName => 'Please enter a name';
+
+  @override
+  String get saveItemFailed => 'Failed to save. Please try again.';
+
+  @override
+  String get deleteCapturedPhotoHint =>
+      'The captured photo will be deleted and cannot be recovered.';
+
+  @override
   String get search => 'Search';
 
   @override

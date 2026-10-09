@@ -34,6 +34,16 @@
   "fromGallery": "จากแกลเลอรี",
   "takePhoto": "ถ่ายรูป",
 
+  "saveItem": "บันทึกเสื้อผ้า",
+  "style": "สไตล์",
+  "selectCategory": "เลือกประเภท",
+  "selectColor": "เลือกสี",
+  "selectStyle": "เลือกสไตล์",
+  "addToCloset": "เพิ่มเข้าตู้เสื้อผ้า",
+  "pleaseEnterName": "กรุณากรอกชื่อเสื้อผ้า",
+  "saveItemFailed": "บันทึกไม่สำเร็จ ลองอีกครั้ง",
+  "deleteCapturedPhotoHint": "รูปที่ถ่ายไว้จะถูกลบและไม่สามารถกู้คืนได้",
+
   "search": "ค้นหา",
   "name": "ชื่อ",
   "searchByName": "ค้นหาจากชื่อ",

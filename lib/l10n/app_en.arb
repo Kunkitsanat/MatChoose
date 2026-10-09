@@ -34,6 +34,16 @@
   "fromGallery": "From Gallery",
   "takePhoto": "Take a Photo",
 
+  "saveItem": "Save Item",
+  "style": "STYLE",
+  "selectCategory": "Select category",
+  "selectColor": "Select color",
+  "selectStyle": "Select style",
+  "addToCloset": "Add to Closet",
+  "pleaseEnterName": "Please enter a name",
+  "saveItemFailed": "Failed to save. Please try again.",
+  "deleteCapturedPhotoHint": "The captured photo will be deleted and cannot be recovered.",
+
   "search": "Search",
   "name": "NAME",
   "searchByName": "Search by name",

@@ -69,6 +69,34 @@ class AppLocalizationsTh extends AppLocalizations {
   String get takePhoto => 'ถ่ายรูป';
 
   @override
+  String get saveItem => 'บันทึกเสื้อผ้า';
+
+  @override
+  String get style => 'สไตล์';
+
+  @override
+  String get selectCategory => 'เลือกประเภท';
+
+  @override
+  String get selectColor => 'เลือกสี';
+
+  @override
+  String get selectStyle => 'เลือกสไตล์';
+
+  @override
+  String get addToCloset => 'เพิ่มเข้าตู้เสื้อผ้า';
+
+  @override
+  String get pleaseEnterName => 'กรุณากรอกชื่อเสื้อผ้า';
+
+  @override
+  String get saveItemFailed => 'บันทึกไม่สำเร็จ ลองอีกครั้ง';
+
+  @override
+  String get deleteCapturedPhotoHint =>
+      'รูปที่ถ่ายไว้จะถูกลบและไม่สามารถกู้คืนได้';
+
+  @override
   String get search => 'ค้นหา';
 
   @override

@@ -212,6 +212,60 @@ abstract class AppLocalizations {
   /// **'Take a Photo'**
   String get takePhoto;
 
+  /// No description provided for @saveItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Item'**
+  String get saveItem;
+
+  /// No description provided for @style.
+  ///
+  /// In en, this message translates to:
+  /// **'STYLE'**
+  String get style;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select category'**
+  String get selectCategory;
+
+  /// No description provided for @selectColor.
+  ///
+  /// In en, this message translates to:
+  /// **'Select color'**
+  String get selectColor;
+
+  /// No description provided for @selectStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select style'**
+  String get selectStyle;
+
+  /// No description provided for @addToCloset.
+  ///
+  /// In en, this message translates to:
+  /// **'Add to Closet'**
+  String get addToCloset;
+
+  /// No description provided for @pleaseEnterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a name'**
+  String get pleaseEnterName;
+
+  /// No description provided for @saveItemFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to save. Please try again.'**
+  String get saveItemFailed;
+
+  /// No description provided for @deleteCapturedPhotoHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The captured photo will be deleted and cannot be recovered.'**
+  String get deleteCapturedPhotoHint;
+
   /// No description provided for @search.
   ///
   /// In en, this message translates to:
