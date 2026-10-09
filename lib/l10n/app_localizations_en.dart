@@ -132,6 +132,21 @@ class AppLocalizationsEn extends AppLocalizations {
   String get delete => 'Delete';
 
   @override
+  String get settings => 'Settings';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get languageSystem => 'System Default';
+
+  @override
+  String get languageEnglish => 'English';
+
+  @override
+  String get languageThai => 'Thai';
+
+  @override
   String get fontSize => 'Font size';
 
   @override

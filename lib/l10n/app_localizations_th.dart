@@ -132,6 +132,21 @@ class AppLocalizationsTh extends AppLocalizations {
   String get delete => 'ลบ';
 
   @override
+  String get settings => 'การตั้งค่า';
+
+  @override
+  String get language => 'ภาษา';
+
+  @override
+  String get languageSystem => 'ตามระบบ';
+
+  @override
+  String get languageEnglish => 'ภาษาอังกฤษ';
+
+  @override
+  String get languageThai => 'ภาษาไทย';
+
+  @override
   String get fontSize => 'ขนาดตัวอักษร';
 
   @override

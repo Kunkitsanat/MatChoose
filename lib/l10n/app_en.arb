@@ -58,6 +58,12 @@
   "cancel": "Cancel",
   "delete": "Delete",
 
+  "settings": "Settings",
+  "language": "Language",
+  "languageSystem": "System Default",
+  "languageEnglish": "English",
+  "languageThai": "Thai",
+
   "fontSize": "Font size",
   "fontSizeSystem": "System default",
   "fontSizeSmall": "Small",

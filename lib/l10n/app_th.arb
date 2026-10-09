@@ -58,6 +58,12 @@
   "cancel": "ยกเลิก",
   "delete": "ลบ",
 
+  "settings": "การตั้งค่า",
+  "language": "ภาษา",
+  "languageSystem": "ตามระบบ",
+  "languageEnglish": "ภาษาอังกฤษ",
+  "languageThai": "ภาษาไทย",
+
   "fontSize": "ขนาดตัวอักษร",
   "fontSizeSystem": "ตามระบบ",
   "fontSizeSmall": "เล็ก",

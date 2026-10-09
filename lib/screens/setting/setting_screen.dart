@@ -41,9 +41,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
-                    'Settings',
-                    style: TextStyle(fontSize: 24.0),
+                  Text(
+                    l10n.settings,
+                    style: const TextStyle(fontSize: 24.0),
                   ),
                 ],
               ),
@@ -54,9 +54,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
               Card(
                 child: Column(
                   children: [
-                    const ListTile(
-                      leading: Icon(Icons.language),
-                      title: Text('Language'),
+                    ListTile(
+                      leading: const Icon(Icons.language),
+                      title: Text(l10n.language),
                     ),
 
                     // RadioGroup จัดการค่าที่เลือกแทน groupValue/onChanged
@@ -68,19 +68,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           widget.onLanguageChanged(value);
                         }
                       },
-                      child: const Column(
+                      child: Column(
                         children: [
                           RadioListTile<AppLanguage>(
                             value: AppLanguage.system,
-                            title: Text('System Default'),
+                            title: Text(l10n.languageSystem),
                           ),
                           RadioListTile<AppLanguage>(
                             value: AppLanguage.english,
-                            title: Text('English'),
+                            title: Text(l10n.languageEnglish),
                           ),
                           RadioListTile<AppLanguage>(
                             value: AppLanguage.thai,
-                            title: Text('ภาษาไทย'),
+                            title: Text(l10n.languageThai),
                           ),
                         ],
                       ),
