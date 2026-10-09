@@ -5,6 +5,8 @@ import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+
 class SearchResultScreen extends StatelessWidget {
   const SearchResultScreen({
     super.key,
@@ -63,6 +65,7 @@ class SearchResultScreen extends StatelessWidget {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
     final tt = theme.textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -105,7 +108,7 @@ class SearchResultScreen extends StatelessWidget {
                     ),
 
                     Text(
-                      'Search Results',
+                      l10n.searchResult,
                       style: tt.titleMedium?.copyWith(
                         color: cs.onSurface,
                         fontSize: 22,
@@ -141,7 +144,8 @@ class SearchResultScreen extends StatelessWidget {
                         ),
                         child: Text(
                           '${results.length} '
-                          '${results.length == 1 ? 'item' : 'items'} found',
+                          '${results.length == 1 ? l10n.item : l10n.items}'
+                          '${l10n.found}',
                           style: tt.bodySmall?.copyWith(
                             color: cs.onSurfaceVariant,
                           ),
@@ -303,6 +307,7 @@ class _EmptyResult extends StatelessWidget {
   Widget build(BuildContext context) {
     final cs = Theme.of(context).colorScheme;
     final tt = Theme.of(context).textTheme;
+    final l10n = AppLocalizations.of(context)!;
 
     return Center(
       child: Padding(
@@ -321,7 +326,7 @@ class _EmptyResult extends StatelessWidget {
             const SizedBox(height: 14),
 
             Text(
-              'No clothes found',
+              l10n.noClothesFound,
               style: tt.titleMedium?.copyWith(
                 color: cs.onSurface,
                 fontWeight: FontWeight.w600,
@@ -331,7 +336,7 @@ class _EmptyResult extends StatelessWidget {
             const SizedBox(height: 6),
 
             Text(
-              'Try adjusting your search filters.',
+              l10n.noClothesFoundHint,
               textAlign: TextAlign.center,
               style: tt.bodySmall?.copyWith(
                 color: cs.onSurfaceVariant,

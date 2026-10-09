@@ -63,6 +63,24 @@ class AppLocalizationsTh extends AppLocalizations {
   String get favoritesOnly => 'รายการโปรดเท่านั้น';
 
   @override
+  String get searchResult => 'ผลการค้นหา';
+
+  @override
+  String get noClothesFound => 'ไม่พบเสื้อผ้า';
+
+  @override
+  String get noClothesFoundHint => 'ลองปรับตัวกรองของคุณ';
+
+  @override
+  String get item => 'ชิ้น';
+
+  @override
+  String get items => 'ชิ้น';
+
+  @override
+  String get found => 'ที่ค้นพบ';
+
+  @override
   String get fontSize => 'ขนาดตัวอักษร';
 
   @override

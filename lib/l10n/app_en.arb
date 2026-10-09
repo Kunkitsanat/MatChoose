@@ -22,6 +22,13 @@
   "allStyles": "All Styles",
   "favoritesOnly": "Favorites Only",
 
+  "searchResult": "Search Results",
+  "noClothesFound": "No clothes found",
+  "noClothesFoundHint": "Try adjusting your search fliters.",
+  "item": "item",
+  "items": "items",
+  "found": "found",
+
   "fontSize": "Font size",
   "fontSizeSystem": "System default",
   "fontSizeSmall": "Small",

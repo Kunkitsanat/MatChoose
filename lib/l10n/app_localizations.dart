@@ -206,6 +206,42 @@ abstract class AppLocalizations {
   /// **'Favorites Only'**
   String get favoritesOnly;
 
+  /// No description provided for @searchResult.
+  ///
+  /// In en, this message translates to:
+  /// **'Search Results'**
+  String get searchResult;
+
+  /// No description provided for @noClothesFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No clothes found'**
+  String get noClothesFound;
+
+  /// No description provided for @noClothesFoundHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Try adjusting your search fliters.'**
+  String get noClothesFoundHint;
+
+  /// No description provided for @item.
+  ///
+  /// In en, this message translates to:
+  /// **'item'**
+  String get item;
+
+  /// No description provided for @items.
+  ///
+  /// In en, this message translates to:
+  /// **'items'**
+  String get items;
+
+  /// No description provided for @found.
+  ///
+  /// In en, this message translates to:
+  /// **'found'**
+  String get found;
+
   /// No description provided for @fontSize.
   ///
   /// In en, this message translates to:

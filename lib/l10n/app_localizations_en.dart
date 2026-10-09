@@ -63,6 +63,24 @@ class AppLocalizationsEn extends AppLocalizations {
   String get favoritesOnly => 'Favorites Only';
 
   @override
+  String get searchResult => 'Search Results';
+
+  @override
+  String get noClothesFound => 'No clothes found';
+
+  @override
+  String get noClothesFoundHint => 'Try adjusting your search fliters.';
+
+  @override
+  String get item => 'item';
+
+  @override
+  String get items => 'items';
+
+  @override
+  String get found => 'found';
+
+  @override
   String get fontSize => 'Font size';
 
   @override
