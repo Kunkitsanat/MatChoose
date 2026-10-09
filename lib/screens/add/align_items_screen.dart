@@ -8,6 +8,8 @@ import 'package:image/image.dart' as img;
 
 import 'save_item_screen.dart';
 
+import 'package:matchoose/l10n/app_localizations.dart';
+
 /// ระยะขอบระหว่างกรอบเส้นประกับรูป asset (พิกเซลบนจอ)
 const double _kGuidePad = 10;
 
@@ -242,7 +244,11 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
         debugPrint('Crop error: $e');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('ประมวลผลรูปไม่สำเร็จ ลองอีกครั้ง')),
+            SnackBar(
+              content: Text(
+                AppLocalizations.of(context)!.imageProcessingFailed,
+              ),
+            ),
           );
         }
       } finally {
@@ -271,7 +277,11 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
       debugPrint('Capture error: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('ถ่ายรูปไม่สำเร็จ ลองอีกครั้ง')),
+          SnackBar(
+            content: Text(
+              AppLocalizations.of(context)!.photoCaptureFailed,
+            ),
+          ),
         );
       }
     } finally {
@@ -342,6 +352,8 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Scaffold(
       backgroundColor: const Color(0xFF2A211C),
       body: SafeArea(
@@ -393,7 +405,9 @@ class _AlignItemsScreenState extends State<AlignItemsScreen> {
               left: 8,
               right: 8,
               child: _TopBar(
-                title: widget.isGalleryMode ? 'Adjust Photo' : 'Align Outfit',
+                title: widget.isGalleryMode
+                    ? l10n.adjustPhoto
+                    : l10n.alignOutfit,
                 onBack: () => Navigator.maybePop(context),
               ),
             ),
@@ -786,6 +800,8 @@ class _GuideTypeMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return Material(
       color: const Color(0xFFE6E1D8),
       borderRadius: BorderRadius.circular(20),
@@ -797,10 +813,10 @@ class _GuideTypeMenu extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
+            Padding(
               padding: EdgeInsets.fromLTRB(4, 0, 4, 8),
               child: Text(
-                'GUIDE TYPE',
+                l10n.guideType,
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -835,6 +851,8 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
@@ -856,7 +874,12 @@ class _MenuItem extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             Text(
-              type.label,
+              switch (type) {
+                GuideType.shirt => l10n.guideShirt,
+                GuideType.tshirt => l10n.guideTshirt,
+                GuideType.pants => l10n.guidePants,
+                GuideType.short => l10n.guideShorts,
+              },
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
@@ -960,6 +983,8 @@ class _ElementsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
     return GestureDetector(
       key: const Key('elements_button'),
       onTap: onTap,
@@ -970,13 +995,13 @@ class _ElementsButton extends StatelessWidget {
           color: active ? const Color(0xFFC4B29C) : const Color(0xFF3A3532),
           borderRadius: BorderRadius.circular(24),
         ),
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.layers_outlined, size: 18, color: Colors.white),
             SizedBox(width: 6),
             Text(
-              'Elements',
+              l10n.elements,
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.w600,

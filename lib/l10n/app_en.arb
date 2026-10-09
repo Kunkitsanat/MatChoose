@@ -34,6 +34,17 @@
   "fromGallery": "From Gallery",
   "takePhoto": "Take a Photo",
 
+  "alignOutfit": "Align Outfit",
+  "adjustPhoto": "Adjust Photo",
+  "guideType": "GUIDE TYPE",
+  "elements": "Elements",
+  "guideShirt": "Shirt",
+  "guideTshirt": "T-Shirt",
+  "guidePants": "Pants",
+  "guideShorts": "Shorts",
+  "imageProcessingFailed": "Failed to process image. Please try again.",
+  "photoCaptureFailed": "Failed to take photo. Please try again.",
+
   "saveItem": "Save Item",
   "style": "STYLE",
   "selectCategory": "Select category",

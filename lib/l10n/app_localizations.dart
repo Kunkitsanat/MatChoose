@@ -212,6 +212,66 @@ abstract class AppLocalizations {
   /// **'Take a Photo'**
   String get takePhoto;
 
+  /// No description provided for @alignOutfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Align Outfit'**
+  String get alignOutfit;
+
+  /// No description provided for @adjustPhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Adjust Photo'**
+  String get adjustPhoto;
+
+  /// No description provided for @guideType.
+  ///
+  /// In en, this message translates to:
+  /// **'GUIDE TYPE'**
+  String get guideType;
+
+  /// No description provided for @elements.
+  ///
+  /// In en, this message translates to:
+  /// **'Elements'**
+  String get elements;
+
+  /// No description provided for @guideShirt.
+  ///
+  /// In en, this message translates to:
+  /// **'Shirt'**
+  String get guideShirt;
+
+  /// No description provided for @guideTshirt.
+  ///
+  /// In en, this message translates to:
+  /// **'T-Shirt'**
+  String get guideTshirt;
+
+  /// No description provided for @guidePants.
+  ///
+  /// In en, this message translates to:
+  /// **'Pants'**
+  String get guidePants;
+
+  /// No description provided for @guideShorts.
+  ///
+  /// In en, this message translates to:
+  /// **'Shorts'**
+  String get guideShorts;
+
+  /// No description provided for @imageProcessingFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to process image. Please try again.'**
+  String get imageProcessingFailed;
+
+  /// No description provided for @photoCaptureFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to take photo. Please try again.'**
+  String get photoCaptureFailed;
+
   /// No description provided for @saveItem.
   ///
   /// In en, this message translates to:

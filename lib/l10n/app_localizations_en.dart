@@ -69,6 +69,37 @@ class AppLocalizationsEn extends AppLocalizations {
   String get takePhoto => 'Take a Photo';
 
   @override
+  String get alignOutfit => 'Align Outfit';
+
+  @override
+  String get adjustPhoto => 'Adjust Photo';
+
+  @override
+  String get guideType => 'GUIDE TYPE';
+
+  @override
+  String get elements => 'Elements';
+
+  @override
+  String get guideShirt => 'Shirt';
+
+  @override
+  String get guideTshirt => 'T-Shirt';
+
+  @override
+  String get guidePants => 'Pants';
+
+  @override
+  String get guideShorts => 'Shorts';
+
+  @override
+  String get imageProcessingFailed =>
+      'Failed to process image. Please try again.';
+
+  @override
+  String get photoCaptureFailed => 'Failed to take photo. Please try again.';
+
+  @override
   String get saveItem => 'Save Item';
 
   @override

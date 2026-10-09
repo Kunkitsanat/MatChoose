@@ -34,6 +34,17 @@
   "fromGallery": "จากแกลเลอรี",
   "takePhoto": "ถ่ายรูป",
 
+  "alignOutfit": "จัดตำแหน่งเสื้อผ้า",
+  "adjustPhoto": "ปรับตำแหน่งรูปภาพ",
+  "guideType": "ประเภทเสื้อผ้า",
+  "elements": "เลือกแบบ",
+  "guideShirt": "เสื้อเชิ้ต",
+  "guideTshirt": "เสื้อยืด",
+  "guidePants": "กางเกงขายาว",
+  "guideShorts": "กางเกงขาสั้น",
+  "imageProcessingFailed": "ประมวลผลรูปไม่สำเร็จ ลองอีกครั้ง",
+  "photoCaptureFailed": "ถ่ายรูปไม่สำเร็จ ลองอีกครั้ง",
+
   "saveItem": "บันทึกเสื้อผ้า",
   "style": "สไตล์",
   "selectCategory": "เลือกประเภท",

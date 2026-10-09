@@ -69,6 +69,36 @@ class AppLocalizationsTh extends AppLocalizations {
   String get takePhoto => 'ถ่ายรูป';
 
   @override
+  String get alignOutfit => 'จัดตำแหน่งเสื้อผ้า';
+
+  @override
+  String get adjustPhoto => 'ปรับตำแหน่งรูปภาพ';
+
+  @override
+  String get guideType => 'ประเภทเสื้อผ้า';
+
+  @override
+  String get elements => 'เลือกแบบ';
+
+  @override
+  String get guideShirt => 'เสื้อเชิ้ต';
+
+  @override
+  String get guideTshirt => 'เสื้อยืด';
+
+  @override
+  String get guidePants => 'กางเกงขายาว';
+
+  @override
+  String get guideShorts => 'กางเกงขาสั้น';
+
+  @override
+  String get imageProcessingFailed => 'ประมวลผลรูปไม่สำเร็จ ลองอีกครั้ง';
+
+  @override
+  String get photoCaptureFailed => 'ถ่ายรูปไม่สำเร็จ ลองอีกครั้ง';
+
+  @override
   String get saveItem => 'บันทึกเสื้อผ้า';
 
   @override
