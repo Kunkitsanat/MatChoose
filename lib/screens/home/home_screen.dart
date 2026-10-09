@@ -9,6 +9,7 @@ import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
 import 'package:matchoose/screens/home/recommend_screen.dart';
 import 'package:matchoose/screens/home/try_outfit_screen.dart';
+import 'package:matchoose/screens/search/search_result_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -172,7 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
       valueListenable: _closet.items,
       builder: (context, items, _) {
         final l10n = AppLocalizations.of(context)!;
-        
+
         if (items.isEmpty) return const _EmptyCloset();
 
         final groups = _groupByCategory(items);
@@ -185,7 +186,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 title: entry.key.localizedLabel(l10n),
                 items: entry.value,
                 onSeeAll: () {
-                  // TODO: ไปหน้าดูทั้งหมดของหมวด entry.key
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SearchResultScreen(
+                        nameQuery: '',
+                        category: entry.key,
+                        color: null,
+                        style: null,
+                        favoritesOnly: false,
+                      ),
+                    ),
+                  );
                 },
                 onItemTap: (item) {
                   Navigator.push(
