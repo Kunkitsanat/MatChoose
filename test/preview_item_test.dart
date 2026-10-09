@@ -1,7 +1,4 @@
-// test/preview_item_screen_test.dart
-//
-// ทดสอบหน้า PreviewItemScreen แบบง่ายๆ: แสดงข้อมูล, favorite, back, delete
-//   flutter test test/preview_item_screen_test.dart
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -1,8 +1,3 @@
-// test/save_item_screen_test.dart
-//
-// ทดสอบหน้า SaveItemScreen แบบง่ายๆ (ใช้ helpers/test_env.dart ร่วมกับเทสหน้าอื่น)
-//   flutter test test/save_item_screen_test.dart
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -145,9 +140,8 @@ void main() {
     await tester.tap(find.byIcon(Icons.delete_outline));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Delete'));
-    await tester.pumpAndSettle();
 
     expect(File(imagePath).existsSync(), isFalse);
-    expect(_repo.items.value, isEmpty);
+    expect(_repo.items.value.length, 0);
   });
 }

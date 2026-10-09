@@ -1,12 +1,6 @@
-// test/recommend_screen_test.dart
-//
-// ทดสอบหน้า RecommendScreen แบบง่ายๆ
-// (กฎจับคู่: style ต้องเหมือนกัน + สีต้องเข้ากัน — ในเทสใช้สีกลุ่ม neutral
-//  ซึ่งเข้ากับทุกอย่าง)
-//   flutter test test/recommend_screen_test.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:matchoose/l10n/app_localizations.dart';
 import 'package:matchoose/models/clothing_item.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/home/preview_item_screen.dart';
@@ -31,8 +25,9 @@ void main() {
       (tester) async {
     await pumpPushed(tester, const RecommendScreen());
 
-    expect(find.text('Recommend'), findsOneWidget);
-    expect(find.text('ยังจับคู่ชุดไม่ได้'), findsOneWidget);
+    final l10n = AppLocalizations.of(tester.element(find.byType(RecommendScreen)))!;
+    expect(find.text(l10n.recommend), findsOneWidget);
+    expect(find.byIcon(Icons.auto_awesome_outlined), findsOneWidget);
     expect(find.byType(PageView), findsNothing);
   });
 
@@ -58,7 +53,7 @@ void main() {
     ];
     await pumpPushed(tester, const RecommendScreen());
 
-    expect(find.text('ยังจับคู่ชุดไม่ได้'), findsOneWidget);
+    expect(find.byIcon(Icons.auto_awesome_outlined), findsOneWidget);
   });
 
   testWidgets('กดรูปชิ้นในชุด => ไปหน้า PreviewItemScreen', (tester) async {

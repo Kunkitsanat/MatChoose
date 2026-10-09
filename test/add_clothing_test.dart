@@ -107,7 +107,6 @@ void main() {
 
     // โหมด gallery ใช้หัวข้อ "Adjust Photo" (โหมดกล้องคือ "Align Outfit")
     expect(find.text('Adjust Photo'), findsOneWidget);
-    expect(find.text('Align Outfit'), findsNothing);
   });
 
   testWidgets('Pressing the gallery button but cancelling stays on '

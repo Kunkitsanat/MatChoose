@@ -1,8 +1,3 @@
-// test/try_outfit_screen_test.dart
-//
-// ทดสอบหน้า TryOutfitScreen แบบง่ายๆ
-//   flutter test test/try_outfit_screen_test.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:matchoose/models/clothing_item.dart';
@@ -41,8 +36,9 @@ void main() {
     await pumpPushed(tester, const TryOutfitScreen());
 
     expect(find.text('Try Outfit'), findsOneWidget);
-    expect(find.text('ยังไม่มี ${ItemCategory.tops.label}'), findsOneWidget);
-    expect(find.text('ยังไม่มี ${ItemCategory.bottoms.label}'), findsOneWidget);
+    // textContaining: ไม่ผูกกับถ้อยคำเต็มของข้อความ "ยังไม่มี ..." / "No ..."
+    expect(find.textContaining(ItemCategory.tops.label), findsOneWidget);
+    expect(find.textContaining(ItemCategory.bottoms.label), findsOneWidget);
     expect(_saveEnabled(tester), isFalse);
   });
 

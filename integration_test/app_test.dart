@@ -9,15 +9,6 @@ import 'package:matchoose/models/app_language.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
 import 'package:matchoose/screens/main_screen.dart';
 
-/// Integration test (ใช้กล้องจริง):
-/// Home -> Add -> Take Photo -> Align -> Save Item -> Home
-///   -> Recommend -> Try Outfit -> Preview -> Favorite -> Delete -> Home
-///
-/// ข้อกำหนดก่อนรัน:
-///  1. ต้องรันบนเครื่องจริง/emulator ที่มีกล้อง
-///  2. ให้สิทธิ์กล้องล่วงหน้า (ไม่งั้น dialog permission ของระบบจะค้าง test):
-///     Android: adb shell pm grant <your.package.name> android.permission.CAMERA
-///  3. รัน: flutter test integration_test/closet_flow_test.dart -d <device-id>
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
@@ -68,7 +59,7 @@ void main() {
     WidgetTester tester, {
     required String name,
     String? guide,
-  }) async {
+    }) async {
     // Home tab -> Add tab
     await tapAndSettle(tester, find.byIcon(Icons.add));
     await tapAndSettle(tester, find.byKey(const Key('take_photo_button')));
@@ -171,6 +162,13 @@ void main() {
       await takePhotoAndSave(tester, name: 'Test Bottom', guide: 'Pants');
       expect(closet.items.value.length, 2);
       expect(find.text('Matchoose'), findsOneWidget);
+
+      /*await tapAndSettle(tester, find.byIcon(Icons.settings_outlined));
+      expect(find.text('Settings'), findsOneWidget);
+      await tapAndSettle(tester, find.text('Thai'));
+      expect(find.text('การตั้งค่า'), findsOneWidget);
+      await tapAndSettle(tester, find.text(''));*/
+
 
       // ===== 4) Home -> Recommend =====
       await tapAndSettle(tester, find.byIcon(Icons.auto_awesome));
