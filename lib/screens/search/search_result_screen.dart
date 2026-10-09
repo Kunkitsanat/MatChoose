@@ -145,7 +145,7 @@ class SearchResultScreen extends StatelessWidget {
                         ),
                         child: Text(
                           '${results.length} '
-                          '${results.length == 1 ? l10n.item : l10n.items}'
+                          '${results.length == 1 ? l10n.item : l10n.items} '
                           '${l10n.found}',
                           style: tt.bodySmall?.copyWith(
                             color: cs.onSurfaceVariant,
