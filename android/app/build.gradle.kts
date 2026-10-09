@@ -32,12 +32,22 @@ android {
         versionName = flutter.versionName
     }
 
-   signingConfigs {
+signingConfigs {
         create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storeFile = keystoreProperties["storeFile"]?.let { file(it) }
-            storePassword = keystoreProperties["storePassword"] as String
+            val keyAliasProp = keystoreProperties["keyAlias"] as? String
+            val keyPasswordProp = keystoreProperties["keyPassword"] as? String
+            val storeFileProp = keystoreProperties["storeFile"] as? String
+            val storePasswordProp = keystoreProperties["storePassword"] as? String
+
+            if (!keyAliasProp.isNullOrBlank() && 
+                !keyPasswordProp.isNullOrBlank() && 
+                !storeFileProp.isNullOrBlank() && 
+                !storePasswordProp.isNullOrBlank()) {
+                keyAlias = keyAliasProp
+                keyPassword = keyPasswordProp
+                storeFile = file(storeFileProp)
+                storePassword = storePasswordProp
+            }
         }
     }
     

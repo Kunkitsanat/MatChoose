@@ -1,210 +1,211 @@
-// integration_test/app_test.dart
-//
-// Integration test แบบง่ายๆ: รันบนเครื่อง/emulator จริง (ใช้ path_provider และ
-// ไฟล์จริง ไม่มีการจำลองอะไร)
-//
-// Flow ที่ทดสอบ:
-//   1. กดแท็บล่างครบทั้ง 5 แท็บ
-//   2. เพิ่มเสื้อ+กางเกง -> Home แสดง -> Preview -> favorite -> Try Outfit
-//      -> Save Outfit -> Recommend -> ลบของ
-//
-// ===== ก่อนรัน =====
-// 1) pubspec.yaml:
-//      dev_dependencies:
-//        integration_test:
-//          sdk: flutter
-// 2) แก้ import ที่มี TODO ให้ตรงกับโปรเจกต์
-// 3) ใช้ emulator / เครื่องเทสเท่านั้น: เทสเขียนข้อมูลลงตู้เสื้อผ้าจริงของแอป
-//    (แต่จะลบของที่ตัวเองสร้างตอนจบ)
-//
-//   flutter test integration_test/app_test.dart -d <device-id>
-
-import 'dart:io';
-
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:image/image.dart' as img;
 import 'package:integration_test/integration_test.dart';
+
 import 'package:matchoose/l10n/app_localizations.dart';
 import 'package:matchoose/models/app_language.dart';
-import 'package:matchoose/models/clothing_item.dart';
-import 'package:matchoose/screens/add/add_clothing_screen.dart';
 import 'package:matchoose/screens/add/closet_repository.dart';
-import 'package:matchoose/screens/home/home_screen.dart';
-import 'package:matchoose/screens/home/outfit_repository.dart';
-import 'package:matchoose/screens/home/preview_item_screen.dart';
-import 'package:matchoose/screens/home/recommend_screen.dart';
-import 'package:matchoose/screens/home/try_outfit_screen.dart';
 import 'package:matchoose/screens/main_screen.dart';
-import 'package:matchoose/screens/outfit/outfit_screen.dart';
-import 'package:matchoose/screens/search/search_screen.dart';
-import 'package:matchoose/screens/setting/setting_screen.dart';
 
-final _closet = ClosetRepository.instance;
-final _outfits = OutfitRepository.instance;
-
-Widget _app() => MaterialApp(
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
-      locale: const Locale('en'),
-      home: MainScreen(
-        selectedLanguage: AppLanguage.values.first,
-        onLanguageChanged: (_) {},
-      ),
-    );
-
-/// กดไอคอนบน NavigationBar (กันชนกับไอคอนชื่อเดียวกันในหน้าอื่น)
-Finder _navIcon(IconData icon) => find.descendant(
-      of: find.byType(NavigationBar),
-      matching: find.byIcon(icon),
-    );
-
-/// pump ไปเรื่อยๆ จนเจอ finder (ใช้รอ I/O จริง)
-Future<void> _pumpUntil(
-  WidgetTester tester,
-  Finder finder, {
-  Duration timeout = const Duration(seconds: 10),
-}) async {
-  final end = DateTime.now().add(timeout);
-  while (finder.evaluate().isEmpty) {
-    if (DateTime.now().isAfter(end)) fail('Timeout: ไม่พบ $finder');
-    await tester.pump(const Duration(milliseconds: 100));
-  }
-  await tester.pumpAndSettle();
-}
-
-/// เพิ่มเสื้อผ้าเข้าตู้จริง (สี neutral + style เดียวกัน => Recommend จับคู่ได้)
-Future<ClothingItem> _addItem(
-  String name,
-  ItemCategory category,
-  Directory tmp,
-) {
-  final file = File('${tmp.path}/$name.png')
-    ..writeAsBytesSync(
-      img.encodePng(img.Image(width: 80, height: 60, numChannels: 4)),
-    );
-  return _closet.add(
-    tempImagePath: file.path,
-    name: name,
-    category: category,
-    color: ItemColor.values.firstWhere((c) => c.group == ColorGroup.neutral),
-    style: ItemStyle.values.first,
-  );
-}
-
+/// Integration test (ใช้กล้องจริง):
+/// Home -> Add -> Take Photo -> Align -> Save Item -> Home
+///   -> Recommend -> Try Outfit -> Preview -> Favorite -> Delete -> Home
+///
+/// ข้อกำหนดก่อนรัน:
+///  1. ต้องรันบนเครื่องจริง/emulator ที่มีกล้อง
+///  2. ให้สิทธิ์กล้องล่วงหน้า (ไม่งั้น dialog permission ของระบบจะค้าง test):
+///     Android: adb shell pm grant <your.package.name> android.permission.CAMERA
+///  3. รัน: flutter test integration_test/closet_flow_test.dart -d <device-id>
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  group('Matchoose app', () {
-    testWidgets('กดแท็บล่างครบ 5 แท็บ => แสดงหน้าที่ถูกต้อง', (tester) async {
-      await tester.pumpWidget(_app());
-      await tester.pumpAndSettle();
-      expect(find.byType(HomeScreen), findsOneWidget);
+  // ------------------------------------------------------------
+  // Helpers
+  // ------------------------------------------------------------
 
-      await tester.tap(_navIcon(Icons.bookmark_border));
-      await tester.pumpAndSettle();
-      expect(find.byType(OutfitScreen), findsOneWidget);
-      expect(find.text('My Outfits'), findsOneWidget);
+  /// pump ไปเรื่อยๆ จนกว่าจะเจอ [finder] (ใช้แทน pumpAndSettle
+  /// เพราะหน้ากล้องมี animation วนไม่รู้จบ ทำให้ settle ไม่ได้)
+  Future<void> pumpUntil(
+    WidgetTester tester,
+    Finder finder, {
+    Duration timeout = const Duration(seconds: 30),
+    String? reason,
+  }) async {
+    final end = DateTime.now().add(timeout);
+    while (DateTime.now().isBefore(end)) {
+      await tester.pump(const Duration(milliseconds: 200));
+      if (finder.evaluate().isNotEmpty) return;
+    }
+    fail(reason ?? 'Timed out waiting for $finder');
+  }
 
-      await tester.tap(_navIcon(Icons.add));
-      await tester.pumpAndSettle();
-      expect(find.byType(AddClothingScreen), findsOneWidget);
+  /// หน่วงทุกขั้นตอนประมาณ 1 วินาที เพื่อให้ดูการทำงานทัน
+  /// (ใช้ pump แทน Future.delayed เพื่อให้เฟรม/กล้องยังอัปเดตระหว่างรอ)
+  const stepDelay = Duration(seconds: 1);
+  Future<void> delay(WidgetTester tester) => tester.pump(stepDelay);
 
-      await tester.tap(_navIcon(Icons.search));
-      await tester.pumpAndSettle();
-      expect(find.byType(SearchScreen), findsOneWidget);
+  Future<void> tapAndSettle(WidgetTester tester, Finder finder) async {
+    expect(finder, findsWidgets);
+    await tester.tap(finder.first);
+    await tester.pumpAndSettle();
+    await delay(tester);
+  }
 
-      await tester.tap(_navIcon(Icons.settings_outlined));
-      await tester.pumpAndSettle();
-      expect(find.byType(SettingsScreen), findsOneWidget);
+  /// เลือกตัวเลือกแรกใน bottom sheet ของช่อง Select (color / style)
+  Future<void> pickFirstOption(WidgetTester tester, String placeholder) async {
+    final field = find.text(placeholder);
+    await tester.ensureVisible(field); // เลื่อนให้ช่องอยู่ในจอก่อนแตะ
+    await tester.pumpAndSettle();
+    await tapAndSettle(tester, field);
+    await tapAndSettle(tester, find.byType(ListTile));
+  }
 
-      await tester.tap(_navIcon(Icons.inventory_2_outlined));
-      await tester.pumpAndSettle();
-      expect(find.byType(HomeScreen), findsOneWidget);
-    });
+  /// ถ่ายรูปด้วยกล้องจริงที่หน้า Align แล้วบันทึกลงตู้ด้วยชื่อ [name]
+  /// guide: ถ้าระบุ (เช่น 'Pants') จะสลับ guide ผ่านเมนู Elements ก่อนถ่าย
+  Future<void> takePhotoAndSave(
+    WidgetTester tester, {
+    required String name,
+    String? guide,
+  }) async {
+    // Home tab -> Add tab
+    await tapAndSettle(tester, find.byIcon(Icons.add));
+    await tapAndSettle(tester, find.byKey(const Key('take_photo_button')));
 
-    testWidgets('flow ตู้เสื้อผ้า: Home -> Preview -> favorite -> Try Outfit '
-        '-> Save -> Recommend -> ลบของ', (tester) async {
-      final tmp = Directory.systemTemp.createTempSync('it_test_');
-      final top = await _addItem('IT Top', ItemCategory.tops, tmp);
-      final bottom = await _addItem('IT Bottom', ItemCategory.bottoms, tmp);
+    // รอกล้องเปิดจริง
+    await pumpUntil(
+      tester,
+      find.byType(CameraPreview),
+      reason: 'Camera preview did not appear (ให้สิทธิ์กล้องแล้วหรือยัง?)',
+    );
 
-      try {
-        await tester.pumpWidget(_app());
-        await _pumpUntil(tester, find.text('IT Top'));
-        final l10n = AppLocalizations.of(
-          tester.element(find.byType(HomeScreen)),
-        )!;
+    await delay(tester);
 
-        // 1) Home แสดงของที่เพิ่ม
-        expect(find.text('IT Top'), findsOneWidget);
-        expect(find.text('IT Bottom'), findsOneWidget);
+    if (guide != null) {
+      await tester.tap(find.byKey(const Key('elements_button')));
+      await delay(tester);
+      await tester.tap(find.text(guide));
+      await delay(tester); // รอโหลด overlay asset ด้วย
+    }
 
-        // 2) กดการ์ด -> Preview -> กดหัวใจ -> favorite ถูกบันทึก
-        await tester.tap(find.text('IT Top'));
-        await tester.pumpAndSettle();
-        expect(find.byType(PreviewItemScreen), findsOneWidget);
+    // ถ่ายรูป (crop/mask ทำใน isolate ใช้เวลาสักพัก)
+    await tester.tap(find.byKey(const Key('shutter_button')));
+    await pumpUntil(
+      tester,
+      find.text('Save Item'),
+      timeout: const Duration(seconds: 60),
+      reason: 'Did not reach Save Item screen after taking photo',
+    );
+    await tester.pumpAndSettle();
+    await delay(tester);
 
-        await tester.tap(find.byIcon(Icons.favorite_border));
-        await tester.pumpAndSettle();
-        expect(
-          _closet.items.value.firstWhere((i) => i.id == top.id).isFavorite,
-          isTrue,
-        );
+    // กรอกข้อมูล (category เดาจาก guide ให้อัตโนมัติ)
+    await tester.enterText(find.byType(TextField), name);
+    // ปิดคีย์บอร์ดก่อน ไม่งั้นมันบังช่อง Select ด้านล่าง ทำให้แตะไม่โดน
+    await tester.testTextInput.receiveAction(TextInputAction.done);
+    FocusManager.instance.primaryFocus?.unfocus();
+    await tester.pumpAndSettle();
+    await delay(tester);
+    await pickFirstOption(tester, 'Select color');
+    await pickFirstOption(tester, 'Select style');
 
-        await tester.tap(find.byIcon(Icons.chevron_left));
-        await tester.pumpAndSettle();
-        expect(find.byType(HomeScreen), findsOneWidget);
+    await tapAndSettle(tester, find.text('Add to Closet'));
 
-        // 3) Try Outfit -> Save Outfit
-        await tester.tap(find.text(l10n.tryOutfit));
-        await tester.pumpAndSettle();
-        expect(find.byType(TryOutfitScreen), findsOneWidget);
+    // Save pop(true) -> Align pop(true) -> กลับหน้า Main
+    await pumpUntil(tester, find.byType(NavigationBar));
+    await tester.pumpAndSettle();
+    await delay(tester);
 
-        await tester.tap(find.text('Save Outfit'));
-        await _pumpUntil(tester, find.text('Outfit saved'));
-        expect(
-          _outfits.outfits.value.any(
-            (o) =>
-                o.itemIds.contains(top.id) && o.itemIds.contains(bottom.id),
-          ),
-          isTrue,
-        );
+    // กลับ Home tab
+    await tapAndSettle(tester, find.byIcon(Icons.inventory_2_outlined));
+  }
 
-        await tester.tap(find.byIcon(Icons.chevron_left));
-        await tester.pumpAndSettle();
+  // ------------------------------------------------------------
+  // Test
+  // ------------------------------------------------------------
 
-        // 4) Recommend แสดงชุดที่จับคู่ให้
-        await tester.tap(find.text(l10n.recommend));
-        await tester.pumpAndSettle();
-        expect(find.byType(RecommendScreen), findsOneWidget);
-        expect(find.byType(PageView), findsOneWidget);
+  testWidgets(
+    'camera -> save -> recommend -> try outfit -> favorite -> delete',
+    (tester) async {
+      final closet = ClosetRepository.instance;
 
-        await tester.tap(find.byIcon(Icons.chevron_left));
-        await tester.pumpAndSettle();
-
-        // 5) ลบของจากหน้า Preview -> หายจาก Home
-        await tester.tap(find.text('IT Top'));
-        await tester.pumpAndSettle();
-        await tester.tap(find.byIcon(Icons.delete_outline));
-        await tester.pumpAndSettle();
-        await tester.tap(find.text('Delete'));
-        await _pumpUntil(tester, find.byType(HomeScreen));
-
-        expect(find.text('IT Top'), findsNothing);
-        expect(_closet.items.value.any((i) => i.id == top.id), isFalse);
-      } finally {
-        // ล้างข้อมูลที่เทสสร้างไว้
-        for (final o in _outfits.outfits.value
-            .where((o) =>
-                o.itemIds.contains(top.id) || o.itemIds.contains(bottom.id))
-            .toList()) {
-          await _outfits.delete(o.id);
+      // เริ่มจากตู้ว่างเพื่อให้ผลทดสอบแน่นอน
+      await tester.runAsync(() async {
+        await closet.load();
+        for (final item in List.of(closet.items.value)) {
+          await closet.delete(item.id);
         }
-        await _closet.delete(top.id);
-        await _closet.delete(bottom.id);
-        if (tmp.existsSync()) tmp.deleteSync(recursive: true);
-      }
-    });
-  });
+      });
+      expect(closet.items.value, isEmpty);
+
+      await tester.pumpWidget(
+        MaterialApp(
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: AppLocalizations.supportedLocales,
+          locale: const Locale('en'),
+          home: MainScreen(
+            selectedLanguage: AppLanguage.english,
+            onLanguageChanged: (_) {},
+          ),
+        ),
+      );
+      await tester.pumpAndSettle();
+      await delay(tester);
+
+      // ===== 1) Home (ว่าง) =====
+      expect(find.text('Matchoose'), findsOneWidget);
+
+      // ===== 2) ถ่ายเสื้อ (T-Shirt = tops) =====
+      await takePhotoAndSave(tester, name: 'Test Top');
+      expect(closet.items.value.length, 1);
+
+      // ===== 3) ถ่ายกางเกง (Pants = bottoms) =====
+      // Recommend ต้องมีทั้งเสื้อและกางเกง จึงถ่ายเพิ่มอีก 1 ชิ้น
+      // (เลือก color/style ตัวเลือกแรกเหมือนกัน เพื่อให้จับคู่กันได้)
+      await takePhotoAndSave(tester, name: 'Test Bottom', guide: 'Pants');
+      expect(closet.items.value.length, 2);
+      expect(find.text('Matchoose'), findsOneWidget);
+
+      // ===== 4) Home -> Recommend =====
+      await tapAndSettle(tester, find.byIcon(Icons.auto_awesome));
+      expect(find.text('Recommend'), findsOneWidget);
+      await tapAndSettle(tester, find.byIcon(Icons.chevron_left));
+
+      // ===== 5) Home -> Try Outfit =====
+      await tapAndSettle(tester, find.byIcon(Icons.checkroom));
+      expect(find.text('Try Outfit'), findsOneWidget);
+
+      // ===== 6) แตะรูปในแถวแรก -> Preview =====
+      await tapAndSettle(tester, find.byType(PageView));
+      expect(find.text('Preview Item'), findsOneWidget);
+
+      // ===== 7) Favorite =====
+      expect(find.byIcon(Icons.favorite_border), findsOneWidget);
+      await tapAndSettle(tester, find.byIcon(Icons.favorite_border));
+      expect(find.byIcon(Icons.favorite), findsOneWidget);
+      expect(closet.items.value.where((i) => i.isFavorite).length, 1);
+
+      // ===== 8) Delete =====
+      await tapAndSettle(tester, find.byIcon(Icons.delete_outline));
+      expect(find.text('Delete this item?'), findsOneWidget);
+      await tapAndSettle(tester, find.text('Delete'));
+
+      // Preview ปิดแล้ว กลับ Try Outfit
+      expect(find.text('Preview Item'), findsNothing);
+      expect(find.text('Try Outfit'), findsOneWidget);
+      expect(closet.items.value.length, 1);
+
+      // ===== 9) กลับ Home =====
+      await tapAndSettle(tester, find.byIcon(Icons.chevron_left));
+      expect(find.text('Matchoose'), findsOneWidget);
+      expect(find.byType(NavigationBar), findsOneWidget);
+    },
+    timeout: const Timeout(Duration(minutes: 5)),
+  );
 }
