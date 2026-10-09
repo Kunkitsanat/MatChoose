@@ -5,6 +5,7 @@ import 'package:matchoose/screens/add/closet_repository.dart';
 import 'search_result_screen.dart';
 
 import 'package:matchoose/l10n/app_localizations.dart';
+import 'package:matchoose/l10n/clothing_localizations.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -108,7 +109,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 value: _category,
                 emptyLabel: l10n.allCategories,
                 values: ItemCategory.values,
-                labelOf: (item) => item.label,
+                labelOf: (item) => item.localizedLabel(l10n),
                 onChanged: (value) {
                   setState(() {
                     _category = value;
@@ -124,7 +125,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 value: _color,
                 emptyLabel: l10n.anyColor,
                 values: ItemColor.values,
-                labelOf: (item) => item.label,
+                labelOf: (item) => item.localizedLabel(l10n),
                 onChanged: (value) {
                   setState(() {
                     _color = value;
@@ -140,7 +141,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 value: _style,
                 emptyLabel: l10n.allStyles,
                 values: ItemStyle.values,
-                labelOf: (item) => item.label,
+                labelOf: (item) => item.localizedLabel(l10n),
                 onChanged: (value) {
                   setState(() {
                     _style = value;
