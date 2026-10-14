@@ -306,4 +306,33 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get colorOther => 'Other';
+
+  @override
+  String get myOutfits => 'My Outfits';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
+  String get save => 'Save';
+
+  @override
+  String get outfitName => 'Outfit name';
+
+  @override
+  String get deleteOutfit => 'Delete this outfit?';
+
+  @override
+  String get deleteOutfitHint => 'The items will stay in your closet.';
+
+  @override
+  String get noOutfits => 'No saved outfits yet';
+
+  @override
+  String get noOutfitsHint =>
+      'Save an outfit from Try Outfit and it will show up here.';
+
+  @override
+  String get outfitItemsMissing =>
+      'Items in this outfit were removed from your closet';
 }

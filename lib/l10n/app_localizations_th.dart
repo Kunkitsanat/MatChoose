@@ -305,4 +305,31 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get colorOther => 'อื่น ๆ';
+
+  @override
+  String get myOutfits => 'ชุดของฉัน';
+
+  @override
+  String get rename => 'เปลี่ยนชื่อ';
+
+  @override
+  String get save => 'บันทึก';
+
+  @override
+  String get outfitName => 'ชื่อชุด';
+
+  @override
+  String get deleteOutfit => 'ลบชุดนี้?';
+
+  @override
+  String get deleteOutfitHint => 'เสื้อผ้าจะยังอยู่ในตู้ของคุณ';
+
+  @override
+  String get noOutfits => 'ยังไม่มีชุดที่บันทึกไว้';
+
+  @override
+  String get noOutfitsHint => 'บันทึกชุดจากหน้าลองชุด แล้วจะแสดงที่นี่';
+
+  @override
+  String get outfitItemsMissing => 'เสื้อผ้าในชุดนี้ถูกนำออกจากตู้แล้ว';
 }

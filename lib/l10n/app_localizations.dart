@@ -685,6 +685,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Other'**
   String get colorOther;
+
+  /// No description provided for @myOutfits.
+  ///
+  /// In en, this message translates to:
+  /// **'My Outfits'**
+  String get myOutfits;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @save.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get save;
+
+  /// No description provided for @outfitName.
+  ///
+  /// In en, this message translates to:
+  /// **'Outfit name'**
+  String get outfitName;
+
+  /// No description provided for @deleteOutfit.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete this outfit?'**
+  String get deleteOutfit;
+
+  /// No description provided for @deleteOutfitHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The items will stay in your closet.'**
+  String get deleteOutfitHint;
+
+  /// No description provided for @noOutfits.
+  ///
+  /// In en, this message translates to:
+  /// **'No saved outfits yet'**
+  String get noOutfits;
+
+  /// No description provided for @noOutfitsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Save an outfit from Try Outfit and it will show up here.'**
+  String get noOutfitsHint;
+
+  /// No description provided for @outfitItemsMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'Items in this outfit were removed from your closet'**
+  String get outfitItemsMissing;
 }
 
 class _AppLocalizationsDelegate

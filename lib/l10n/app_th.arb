@@ -119,5 +119,15 @@
   "colorBeige": "เบจ",
   "colorCream": "ครีม",
   "colorKhaki": "กากี",
-  "colorOther": "อื่น ๆ"
+  "colorOther": "อื่น ๆ",
+
+  "myOutfits": "ชุดของฉัน",
+  "rename": "เปลี่ยนชื่อ",
+  "save": "บันทึก",
+  "outfitName": "ชื่อชุด",
+  "deleteOutfit": "ลบชุดนี้?",
+  "deleteOutfitHint": "เสื้อผ้าจะยังอยู่ในตู้ของคุณ",
+  "noOutfits": "ยังไม่มีชุดที่บันทึกไว้",
+  "noOutfitsHint": "บันทึกชุดจากหน้าลองชุด แล้วจะแสดงที่นี่",
+  "outfitItemsMissing": "เสื้อผ้าในชุดนี้ถูกนำออกจากตู้แล้ว"
 }

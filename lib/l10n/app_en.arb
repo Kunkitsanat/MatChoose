@@ -119,5 +119,17 @@
   "colorBeige": "Beige",
   "colorCream": "Cream",
   "colorKhaki": "Khaki",
-  "colorOther": "Other"
+  "colorOther": "Other",
+
+  "myOutfits": "My Outfits",
+  "rename": "Rename",
+  "save": "Save",
+  "outfitName": "Outfit name",
+  "deleteOutfit": "Delete this outfit?",
+  "deleteOutfitHint": "The items will stay in your closet.",
+  "noOutfits": "No saved outfits yet",
+  "noOutfitsHint": "Save an outfit from Try Outfit and it will show up here.",
+  "outfitItemsMissing": "Items in this outfit were removed from your closet"
+
+
 }
