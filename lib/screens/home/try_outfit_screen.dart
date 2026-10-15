@@ -152,6 +152,7 @@ class _TryOutfitScreenState extends State<TryOutfitScreen> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 20),
                   child: FilledButton.icon(
+                    key: const Key('save_outfit_button'),
                     onPressed: all.isEmpty ? null : () => _saveOutfit(all),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size(180, 48),
