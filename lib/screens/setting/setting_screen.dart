@@ -76,11 +76,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           ),
                           RadioListTile<AppLanguage>(
                             value: AppLanguage.english,
-                            title: Text(l10n.languageEnglish),
+                            title: Text('English (${l10n.languageEnglish})'),
                           ),
                           RadioListTile<AppLanguage>(
                             value: AppLanguage.thai,
-                            title: Text(l10n.languageThai),
+                            title: Text('ไทย (${l10n.languageThai})'),
+                          ),
+                          RadioListTile<AppLanguage>(
+                            value: AppLanguage.chinese,
+                            title: Text('简体中文 (${l10n.languageChinese})'),
                           ),
                         ],
                       ),

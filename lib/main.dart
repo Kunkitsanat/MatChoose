@@ -32,6 +32,8 @@ class _MatchooseAppState extends State<MatchooseApp> {
         return AppLanguage.english;
       case 'th':
         return AppLanguage.thai;
+      case 'zh':
+        return AppLanguage.chinese;
       default:
         return AppLanguage.system;
     }
@@ -47,6 +49,9 @@ class _MatchooseAppState extends State<MatchooseApp> {
 
       case AppLanguage.thai:
         return const Locale('th');
+
+      case AppLanguage.chinese:
+        return const Locale('zh');
     }
   }
 

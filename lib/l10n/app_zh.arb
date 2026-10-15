@@ -1,0 +1,135 @@
+
+{
+  "@@locale": "zh",
+
+  "recommend": "推荐搭配",
+  "tryOutfit": "试穿搭配",
+  "seeAll": "查看全部",
+  "emptyCloset": "衣橱还是空的",
+  "emptyClosetHint": "点击 + 拍照并添加第一件衣物",
+
+  "saveOutfit": "保存搭配",
+  "outfitSaved": "搭配已保存",
+  "outfitAlreadySaved": "该搭配已保存",
+
+  "unableToRecommend": "无法生成搭配",
+  "unableToRecommendHint": "至少需要一件风格相同且颜色协调的上衣和下装。",
+
+  "topsAndJackets": "上衣及外套",
+  "bottoms": "下装",
+  "shoes": "鞋子",
+
+  "casualWear": "休闲装",
+  "formalWear": "正装",
+
+  "noItemsInCategory": "暂无{category}",
+  "@noItemsInCategory": {
+    "placeholders": {
+      "category": {
+        "type": "String"
+      }
+    }
+  },
+
+  "addClothing": "添加衣物",
+  "fromGallery": "从相册选择",
+  "takePhoto": "拍照",
+
+  "alignOutfit": "对齐衣物",
+  "adjustPhoto": "调整照片",
+  "guideType": "衣物类型",
+  "elements": "选择模板",
+  "guideShirt": "衬衫",
+  "guideTshirt": "T恤",
+  "guidePants": "长裤",
+  "guideShorts": "短裤",
+  "imageProcessingFailed": "图片处理失败，请重试",
+  "photoCaptureFailed": "拍照失败，请重试",
+
+  "saveItem": "保存衣物",
+  "style": "风格",
+  "selectCategory": "选择类别",
+  "selectColor": "选择颜色",
+  "selectStyle": "选择风格",
+  "addToCloset": "添加到衣橱",
+  "pleaseEnterName": "请输入衣物名称",
+  "saveItemFailed": "保存失败，请重试",
+  "deleteCapturedPhotoHint": "拍摄的照片将被删除且无法恢复",
+
+  "search": "搜索",
+  "name": "名称",
+  "searchByName": "按名称搜索",
+  "category": "类别",
+  "allCategories": "所有类别",
+  "color": "颜色",
+  "anyColor": "任意颜色",
+  "formality": "正式程度",
+  "allStyles": "所有风格",
+  "favoritesOnly": "仅显示收藏",
+
+  "searchResult": "搜索结果",
+  "noClothesFound": "未找到衣物",
+  "noClothesFoundHint": "请尝试调整搜索筛选条件",
+  "item": "件",
+  "items": "件",
+  "found": "已找到",
+
+  "previewItem": "查看衣物",
+  "deleteItem": "删除这件衣物？",
+  "deleteItemHint": "这件衣物将从衣橱中移除",
+  "cancel": "取消",
+  "delete": "删除",
+
+  "settings": "设置",
+  "language": "语言",
+  "languageSystem": "跟随系统",
+  "languageEnglish": "英语",
+  "languageThai": "泰语",
+  "languageChinese": "简体中文",
+
+  "fontSize": "字体大小",
+  "fontSizeSystem": "跟随系统",
+  "fontSizeSmall": "小",
+  "fontSizeNormal": "标准",
+  "fontSizeLarge": "大",
+  "fontSizeExtraLarge": "特大",
+
+  "colorBlack": "黑色",
+  "colorWhite": "白色",
+  "colorGray": "灰色",
+  "colorSilver": "银色",
+  "colorRed": "红色",
+  "colorBurgundy": "酒红色",
+  "colorPink": "粉色",
+  "colorCoral": "珊瑚色",
+  "colorOrange": "橙色",
+  "colorPeach": "蜜桃色",
+  "colorYellow": "黄色",
+  "colorGold": "金色",
+  "colorGreen": "绿色",
+  "colorOlive": "橄榄绿",
+  "colorMint": "薄荷绿",
+  "colorTeal": "蓝绿色",
+  "colorBlue": "蓝色",
+  "colorSkyBlue": "天蓝色",
+  "colorNavy": "海军蓝",
+  "colorRoyalBlue": "宝蓝色",
+  "colorPurple": "紫色",
+  "colorLavender": "薰衣草紫",
+  "colorBrown": "棕色",
+  "colorTan": "棕褐色",
+  "colorBeige": "米色",
+  "colorCream": "奶油色",
+  "colorKhaki": "卡其色",
+  "colorOther": "其他",
+
+  "myOutfits": "我的搭配",
+  "rename": "重命名",
+  "save": "保存",
+  "outfitName": "搭配名称",
+  "deleteOutfit": "删除这套搭配？",
+  "deleteOutfitHint": "衣物仍会保留在衣橱中",
+  "noOutfits": "暂无已保存的搭配",
+  "noOutfitsHint": "在试穿搭配页面保存的搭配将显示在这里",
+  "outfitItemsMissing": "这套搭配中的衣物已从衣橱中移除"
+}

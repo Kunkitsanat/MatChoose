@@ -7,6 +7,7 @@ import 'package:intl/intl.dart' as intl;
 
 import 'app_localizations_en.dart';
 import 'app_localizations_th.dart';
+import 'app_localizations_zh.dart';
 
 // ignore_for_file: type=lint
 
@@ -96,6 +97,7 @@ abstract class AppLocalizations {
   static const List<Locale> supportedLocales = <Locale>[
     Locale('en'),
     Locale('th'),
+    Locale('zh'),
   ];
 
   /// No description provided for @recommend.
@@ -482,6 +484,12 @@ abstract class AppLocalizations {
   /// **'Thai'**
   String get languageThai;
 
+  /// No description provided for @languageChinese.
+  ///
+  /// In en, this message translates to:
+  /// **'Simplified Chinese'**
+  String get languageChinese;
+
   /// No description provided for @fontSize.
   ///
   /// In en, this message translates to:
@@ -752,7 +760,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'th'].contains(locale.languageCode);
+      <String>['en', 'th', 'zh'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -765,6 +773,8 @@ AppLocalizations lookupAppLocalizations(Locale locale) {
       return AppLocalizationsEn();
     case 'th':
       return AppLocalizationsTh();
+    case 'zh':
+      return AppLocalizationsZh();
   }
 
   throw FlutterError(

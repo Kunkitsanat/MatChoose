@@ -206,6 +206,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageThai => 'Thai';
 
   @override
+  String get languageChinese => 'Simplified Chinese';
+
+  @override
   String get fontSize => 'Font size';
 
   @override
